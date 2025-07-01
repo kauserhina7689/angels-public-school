@@ -1,7 +1,6 @@
 "use client";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -10,13 +9,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  BarChart2,
   Bell,
+  BookOpen,
   Calendar,
   FileText,
   LayoutDashboard,
   LogOut,
   Menu,
-  Trophy,
+  Users,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -27,33 +28,28 @@ import { useState } from "react";
 const menuItems = [
   {
     title: "Dashboard",
-    href: "/student",
+    href: "/school",
     icon: LayoutDashboard,
-    badge: null,
   },
   {
-    title: "My Results",
-    href: "/student/results",
-    icon: Trophy,
-    badge: null,
+    title: "Students",
+    href: "/school/students",
+    icon: Users,
   },
   {
     title: "Attendance",
-    href: "/student/attendance",
+    href: "/school/attendance",
     icon: Calendar,
-    badge: "92%",
+  },
+  {
+    title: "Marks",
+    href: "/school/marks",
+    icon: BookOpen,
   },
   {
     title: "Assignments",
-    href: "/student/assignments",
+    href: "/school/assignments",
     icon: FileText,
-    badge: "3",
-  },
-  {
-    title: "Notifications",
-    href: "/student/notifications",
-    icon: Bell,
-    badge: "2",
   },
 ];
 
