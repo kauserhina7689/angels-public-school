@@ -1,13 +1,5 @@
 import { HomeworkType } from "@/lib/types";
 import { Document, model, Model, models, Schema } from "mongoose";
-
-interface asssignment {
-  subject: string;
-  title: string;
-  description: string;
-  attchment?: string;
-}
-
 interface HomeworkDocument extends HomeworkType, Document {}
 
 const HomeworkSchema = new Schema<HomeworkDocument>({

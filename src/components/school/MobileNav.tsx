@@ -9,8 +9,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  BarChart2,
-  Bell,
   BookOpen,
   Calendar,
   FileText,

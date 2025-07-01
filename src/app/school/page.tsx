@@ -19,11 +19,9 @@ import {
 import {
   Users,
   BookOpen,
-  Calendar,
   FileText,
   TrendingUp,
   AlertCircle,
-  Clock,
   GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -110,7 +108,7 @@ export default function SchoolDashboard() {
       <div>
         <h1 className="text-3xl font-bold">School Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's what's happening at your school today.
+          Welcome back! Here&apos;s what&apos;s happening at your school today.
         </p>
       </div>
 

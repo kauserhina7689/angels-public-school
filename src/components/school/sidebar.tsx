@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   LayoutDashboard,
-  Trophy,
   Calendar,
   FileText,
-  Bell,
   LogOut,
   Users,
   BookOpen,
