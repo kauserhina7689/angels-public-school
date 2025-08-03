@@ -5,11 +5,11 @@ import {
   LayoutDashboard,
   Calendar,
   FileText,
-  LogOut,
   Users,
   BookOpen,
 } from "lucide-react";
 import NavLink from "../common/NavBarLink";
+import { LogoutDialog } from "../common/logoutDialog";
 
 const menuItems = [
   {
@@ -75,15 +75,7 @@ export function SchoolSidebar({ className }: StudentSidebarProps) {
 
       {/* Footer */}
       <div className="p-3 border-t border-gray-200">
-        <Button
-          variant="ghost"
-          // onClick={handleLogout}
-          className={cn(
-            "w-full justify-start h-11 px-3 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700"
-          )}
-        >
-          <LogOut className={cn("h-5 w-5", "mr-3")} /> Logout
-        </Button>
+        <LogoutDialog />
       </div>
     </aside>
   );

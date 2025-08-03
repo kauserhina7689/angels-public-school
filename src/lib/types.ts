@@ -55,3 +55,8 @@ export interface announcementsType {
   date: Date;
   attachment?: string;
 }
+
+export interface admintype {
+  name: string;
+  number: number;
+}

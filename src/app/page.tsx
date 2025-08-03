@@ -1,11 +1,9 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { authenticateUser } from "@/server/actions/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/login");
-  }, [router]);
+export default async function Home() {
+  const isAuthenticated = await authenticateUser();
+  if (!isAuthenticated) redirect("/login");
+  redirect(isAuthenticated.role);
   return <></>;
 }
