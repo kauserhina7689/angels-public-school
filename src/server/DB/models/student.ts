@@ -1,8 +1,12 @@
 import { studentType } from "@/lib/types";
 import { Document, Model, Schema, model, models } from "mongoose";
+import { ClassDocument } from "./Class";
 
 interface StudentDocument extends studentType, Document {
   password: string;
+}
+export interface PopulatedStudent extends Omit<StudentDocument, "class_id"> {
+  class_id: Pick<ClassDocument, "_id" | "class_name">;
 }
 const StudentSchema = new Schema<StudentDocument>(
   {
@@ -23,5 +27,5 @@ const StudentSchema = new Schema<StudentDocument>(
 // Add individual indexes
 StudentSchema.index({ class_id: 1 });
 StudentSchema.index({ name: 1 });
-export const Student: Model<StudentDocument> =
+export const StudentModel: Model<StudentDocument> =
   models.Student || model<StudentDocument>("Student", StudentSchema);

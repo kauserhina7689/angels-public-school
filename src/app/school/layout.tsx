@@ -1,8 +1,13 @@
 import SchoolHeader from "@/components/school/schoolHeader";
 import { SchoolSidebar } from "@/components/school/sidebar";
+import { authenticateUser } from "@/server/actions/auth";
+import { redirect } from "next/navigation";
 import React from "react";
 
-function SchoolLayout({ children }: { children: React.ReactNode }) {
+async function SchoolLayout({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = await authenticateUser();
+  if (!isAuthenticated) redirect("/login");
+  if (isAuthenticated.role === "student") redirect("/student");
   return (
     <div className="h-full w-full max-h-svh flex flex-col">
       <SchoolHeader></SchoolHeader>
