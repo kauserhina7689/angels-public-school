@@ -10,6 +10,8 @@ export interface studentType {
   serialNumber: number;
   class_id: Types.ObjectId;
   rollnumber: string;
+  bloodGroup: string;
+  dob: Date;
 }
 
 export interface marksType {

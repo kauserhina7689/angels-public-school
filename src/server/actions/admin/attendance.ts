@@ -23,7 +23,6 @@ export async function addAttendanceAction(
   date?: string
 ) {
   const istDate = getISTMiddayDate(date);
-  console.log({ presentStudents });
 
   const existing = await AttendanceModel.find({
     date: istDate,

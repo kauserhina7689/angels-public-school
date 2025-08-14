@@ -24,3 +24,13 @@ export function formatDateLocal(date: Date) {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`; // same format as input[type="date"]
 }
+export const bloodGroups = [
+  "A+",
+  "A−",
+  "B+",
+  "B−",
+  "AB+",
+  "AB−",
+  "O+",
+  "O−",
+] as const;

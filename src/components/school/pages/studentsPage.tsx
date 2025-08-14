@@ -14,7 +14,19 @@ import AddStudentForm from "@/components/school/modals/addStudentForm";
 import "@/server/DB/models/Class";
 import { FilteredStudentType } from "@/server/actions/admin/students";
 
-function StudentsPage({ students }: { students: FilteredStudentType[] }) {
+function StudentsPage({
+  students,
+  classes,
+}: {
+  students: FilteredStudentType[];
+  classes: {
+    batch: number;
+    index: number;
+    class_name: string;
+    _id: string;
+    students: string[];
+  }[];
+}) {
   const [query, setQuery] = useState("");
   const handleReset = () => {
     setQuery("");
@@ -30,6 +42,7 @@ function StudentsPage({ students }: { students: FilteredStudentType[] }) {
     acc[student.class_name]!.push(student);
     return acc;
   }, {} as Record<string, typeof students>);
+
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -59,7 +72,7 @@ function StudentsPage({ students }: { students: FilteredStudentType[] }) {
           )}
         </form>
 
-        <AddStudentForm />
+        <AddStudentForm classes={classes} />
       </div>
 
       <div className="space-y-10">

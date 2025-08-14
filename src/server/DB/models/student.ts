@@ -20,6 +20,12 @@ const StudentSchema = new Schema<StudentDocument>(
     class_id: { type: Schema.Types.ObjectId, ref: "Class", required: true },
     rollnumber: { type: String, required: true },
     password: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ["A+", "A−", "B+", "B−", "AB+", "AB−", "O+", "O−"],
+      required: true,
+    },
+    dob: { type: Date },
   },
   { timestamps: true }
 );
@@ -27,5 +33,6 @@ const StudentSchema = new Schema<StudentDocument>(
 // Add individual indexes
 StudentSchema.index({ class_id: 1 });
 StudentSchema.index({ name: 1 });
+StudentSchema.index({ class_id: 1, rollnumber: 1 }, { unique: true });
 export const StudentModel: Model<StudentDocument> =
   models.Student || model<StudentDocument>("Student", StudentSchema);
