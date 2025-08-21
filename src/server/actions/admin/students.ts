@@ -51,10 +51,9 @@ export async function getAllStudents(): Promise<FilteredStudentType[]> {
         updatedAt,
       });
     });
-    return transFormedStudents;
+    return transFormedStudents || [];
   } catch (error) {
     console.log(error);
-
     return [];
   }
 }
@@ -63,7 +62,7 @@ export async function getClasses() {
   try {
     const classes = await ClassModel.find().select(
       "-__v -createdAt -updatedAt"
-    );
+    )||[];
     return classes.map(({ students, _id, batch, index, class_name }) => ({
       batch,
       index,
