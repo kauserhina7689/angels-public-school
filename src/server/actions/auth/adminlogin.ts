@@ -11,7 +11,7 @@ export async function adminLogin(data: propsType) {
   try {
     const {mobileNumber,password}=data;
     const adminNumber = process.env.ADMIN_MOBILE_NUMBER!;
-    const adminPassword = process.env.PASSWORD!;
+    const adminPassword = Number(process.env.ADMIN_PASSWORD!);
  
     if (adminNumber!==mobileNumber)
       return {
