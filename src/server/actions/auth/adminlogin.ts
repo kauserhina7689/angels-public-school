@@ -1,7 +1,4 @@
 "use server";
-import { connectDB } from "@/server/DB";
-import { adminModel } from "@/server/DB/models/admin";
-import { verifyPassword } from "@/server/utils/password";
 import { generateToken } from "@/server/utils/token";
 import { cookies } from "next/headers";
 
@@ -12,19 +9,17 @@ interface propsType {
 
 export async function adminLogin(data: propsType) {
   try {
-    await connectDB();
-    const admin = await adminModel.findOne({ number: data.mobileNumber });
-    if (!admin)
+    const {mobileNumber,password}=data;
+    const adminNumber = process.env.ADMIN_MOBILE_NUMBER!;
+    const adminPassword = process.env.PASSWORD!;
+ 
+    if (adminNumber!==mobileNumber)
       return {
         success: false,
         message: "Mobile number does not exist",
         errors: { mobileNumber: "Mobile number does not exist" },
       };
-    const isPasswordCorrect = await verifyPassword(
-      data.password,
-      admin.password
-    );
-    if (!isPasswordCorrect)
+    if (adminPassword!==password)
       return {
         success: false,
         message: "Password is incorrect!",
@@ -32,10 +27,9 @@ export async function adminLogin(data: propsType) {
           password: "Password in incorrect",
         },
       };
-    const { _id, name, number } = admin;
     const token = await generateToken({
-      _id: JSON.stringify(_id),
-      number,
+      _id: "admin_user_id",
+      number:mobileNumber,
       role: "school",
     });
 
@@ -45,7 +39,7 @@ export async function adminLogin(data: propsType) {
 
     return {
       success: true,
-      message: "Logged in successfully as " + name,
+      message: "Logged in successfully as " +  process.env.ADMIN_USER_NAME!,
       errors: {},
     };
   } catch (error) {
