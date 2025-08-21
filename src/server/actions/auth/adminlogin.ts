@@ -10,8 +10,8 @@ interface propsType {
 export async function adminLogin(data: propsType) {
   try {
     const {mobileNumber,password}=data;
-    const adminNumber = process.env.ADMIN_MOBILE_NUMBER!;
-    const adminPassword = Number(process.env.ADMIN_PASSWORD!);
+    const adminNumber = Number(process.env.ADMIN_MOBILE_NUMBER!);
+    const adminPassword = process.env.ADMIN_PASSWORD!;
  
     if (adminNumber!==mobileNumber)
       return {
