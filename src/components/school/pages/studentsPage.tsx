@@ -13,6 +13,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import AddStudentForm from "@/components/school/modals/addStudentForm";
 import "@/server/DB/models/Class";
 import { FilteredStudentType } from "@/server/actions/admin/students";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import AddClassDialog from "../modals/addClass";
 
 function StudentsPage({
   students,
@@ -35,7 +37,8 @@ function StudentsPage({
     (student) =>
       student.name.toLowerCase().includes(query.toLowerCase()) ||
       student.rollnumber.toLowerCase().includes(query.toLowerCase()) ||
-      student.fatherName.toLowerCase().includes(query.toLowerCase())
+      student.fatherName.toLowerCase().includes(query.toLowerCase()) ||
+      student.class_name.toLowerCase().includes(query.toLowerCase())
   );
   const studentsByClass = filteredStudents!.reduce((acc, student) => {
     if (!acc[student.class_name]) acc[student.class_name] = [];
@@ -44,8 +47,8 @@ function StudentsPage({
   }, {} as Record<string, typeof students>);
 
   return (
-    <div className="p-6 space-y-6 h-full overflow-y-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
+      <div className="flex border-b z-10 pb-2 sticky top-0  flex-col bg-background sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Manage Students</h1>
           <p className="text-muted-foreground">
@@ -71,14 +74,16 @@ function StudentsPage({
             </button>
           )}
         </form>
-
-        <AddStudentForm classes={classes} />
+        <div className="flex items-center gap-4 grow  md:justify-end">
+          <AddClassDialog />
+          <AddStudentForm classes={classes} />
+        </div>
       </div>
 
       <div className="space-y-10">
         {Object.entries(studentsByClass).map(([className, classStudents]) => (
           <div key={className}>
-            <h2 className="text-2xl font-semibold mb-4 text-blue-700">
+            <h2 className="text-2xl font-semibold mb-4 text-primary">
               {className}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
@@ -89,9 +94,12 @@ function StudentsPage({
                 >
                   <CardHeader>
                     <div className="flex space-x-4 items-center">
-                      <Avatar className="h-8 w-8 ">
-                        {/* <AvatarImage src="/placeholder.svg?height=32&width=32" /> */}
-                        <AvatarFallback className=" text-white text-sm bg-gradient-to-r from-indigo-600 to-purple-600">
+                      <Avatar className="h-14 w-14 ">
+                        <AvatarImage
+                          src={student.image_url}
+                          className="object-cover w-full h-full"
+                        />
+                        <AvatarFallback className=" text-white text-sm bg-primary">
                           {student.name
                             .split(" ")
                             .map((n) => n[0])

@@ -5,10 +5,10 @@ export interface ClassDocument extends ClassType, Document {}
 
 const ClassSchema = new Schema<ClassDocument>(
   {
-    class_name: { type: String, required: true },
-    batch: { type: Number, required: true },
+    class_name: { type: String, required: true, unique: true },
+    // batch: { type: Number, required: true },
     students: [{ type: Schema.Types.ObjectId, ref: "Student" }],
-    index: { type: Number, required: true },
+    index: { type: Number },
   },
   { timestamps: true }
 );

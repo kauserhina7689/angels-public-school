@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { Plus, User2 } from "lucide-react";
 // schemas/studentSchema.ts
 import { z } from "zod";
 import {
@@ -35,6 +35,7 @@ import { createStudent } from "@/server/actions/admin/students";
 import DatePicker from "@/components/common/DatePicker";
 import { bloodGroups, formatDateLocal } from "@/lib/utils";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const studentSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -61,6 +62,18 @@ export const studentSchema = z.object({
   bloodGroup: z.enum(bloodGroups, {
     errorMap: () => ({ message: "Invalid blood group" }),
   }),
+  file: z
+    .custom<File>(
+      (val) => {
+        return val instanceof File;
+      },
+      {
+        message: "Please upload student image",
+      }
+    )
+    .refine((val) => val.size <= 100 * 1024 * 1024, {
+      message: "Max size exceeded",
+    }),
 });
 
 export type StudentFormData = z.infer<typeof studentSchema>;
@@ -77,6 +90,8 @@ function AddStudentForm({
   }[];
 }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
+  const router = useRouter();
   const form = useForm<StudentFormData>({
     resolver: zodResolver(studentSchema),
     defaultValues: {
@@ -85,7 +100,7 @@ function AddStudentForm({
       motherName: "Aarzoo parveen",
       address: "123 Green Street, Delhi",
       serialNumber: 1,
-      class_id: classes[0]._id,
+      class_id: classes[0]?._id ?? "",
       rollnumber: 1,
       mobileNumber: 9876543210,
       adhaarNumber: 123123123123,
@@ -93,6 +108,17 @@ function AddStudentForm({
       bloodGroup: "AB−",
     },
   });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue("file", file);
+      const url = URL.createObjectURL(file);
+      setPreview(url);
+      console.log(url);
+      // Optional: cleanup old preview
+      return () => URL.revokeObjectURL(url);
+    }
+  };
   const onSubmit = async (data: StudentFormData) => {
     const id = toast.loading(`Registering ${data.name}...`);
 
@@ -111,17 +137,46 @@ function AddStudentForm({
         return;
       }
       toast.success(resp.message, { id });
-      // form.reset();
+      form.reset();
+      router.refresh();
+      setIsAddModalOpen(false);
+      setPreview("");
     } catch (error) {
       toast.error("Something went wrong", { id });
       console.log("error while registering student ", error);
     }
   };
+  const textFields: {
+    name: keyof Omit<StudentFormData, "file">;
+    label: string;
+    type?: string;
+  }[] = [
+    { name: "name", label: "Name" },
+    { name: "fatherName", label: "Father's Name" },
+    { name: "motherName", label: "Mother's Name" },
+    { name: "address", label: "Address" },
+    {
+      name: "mobileNumber",
+      label: "Mobile Number",
+      type: "number",
+    },
+    {
+      name: "adhaarNumber",
+      label: "Aadhaar Number",
+      type: "number",
+    },
+    {
+      name: "serialNumber",
+      label: "Serial Number",
+      type: "number",
+    },
+    { name: "rollnumber", label: "Roll Number", type: "number" },
+  ];
 
   return (
     <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl w-full sm:w-auto">
+        <Button className="rounded-xl ">
           <Plus className="w-4 h-4 mr-2" />
           Add Student
         </Button>
@@ -137,28 +192,41 @@ function AddStudentForm({
             className="space-y-4 overflow-auto flex flex-col max-h-[70svh]"
           >
             <div className="grid md:grid-cols-2 gap-5 overflow-auto p-2 grow">
-              {[
-                { name: "name", label: "Name" },
-                { name: "fatherName", label: "Father's Name" },
-                { name: "motherName", label: "Mother's Name" },
-                { name: "address", label: "Address" },
-                {
-                  name: "mobileNumber",
-                  label: "Mobile Number",
-                  type: "number",
-                },
-                {
-                  name: "adhaarNumber",
-                  label: "Aadhaar Number",
-                  type: "number",
-                },
-                {
-                  name: "serialNumber",
-                  label: "Serial Number",
-                  type: "number",
-                },
-                { name: "rollnumber", label: "Roll Number", type: "number" },
-              ].map(({ name, label, type = "text" }) => {
+              <FormField
+                control={form.control}
+                name="file"
+                render={() => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel
+                      htmlFor="studentImage"
+                      className="relative h-32 rounded-full overflow-clip aspect-square col-span-2 mx-auto"
+                    >
+                      {preview ? (
+                        <>
+                          <img
+                            src={preview}
+                            alt=""
+                            className="object-cover absolute rounded-full inset-0 h-full w-full"
+                          />
+                        </>
+                      ) : (
+                        <div className="h-full w-full rounded-full bg-secondary">
+                          <User2 className="h-full w-full text-gray-600" />
+                        </div>
+                      )}
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        id="studentImage"
+                      />
+                    </FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {textFields.map(({ name, label, type = "text" }) => {
                 return (
                   <FormField
                     key={name}
@@ -168,7 +236,12 @@ function AddStudentForm({
                       <FormItem>
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
-                          <Input placeholder={label} type={type} {...field} />
+                          <Input
+                            placeholder={label}
+                            type={type}
+                            // eslint-disable-next-line
+                            {...(field as any)}
+                          />
                         </FormControl>
                         {/* <FormDescription>
                         This is your public display name.
@@ -258,7 +331,11 @@ function AddStudentForm({
             </div>
 
             <DialogFooter>
-              <Button type="button" variant={"outline"}>
+              <Button
+                type="button"
+                onClick={() => setIsAddModalOpen(false)}
+                variant={"outline"}
+              >
                 Cancel
               </Button>
               <Button type="submit">Register Student</Button>

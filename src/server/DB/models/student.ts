@@ -26,6 +26,14 @@ const StudentSchema = new Schema<StudentDocument>(
       required: true,
     },
     dob: { type: Date },
+    image_url: {
+      type: String,
+      required: [true, "Video URL is required"],
+    },
+    image_public_id: {
+      type: String,
+      required: [true, "Video URL is required"],
+    },
   },
   { timestamps: true }
 );

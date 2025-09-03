@@ -12,6 +12,8 @@ export interface studentType {
   rollnumber: string;
   bloodGroup: string;
   dob: Date;
+  image_url: string;
+  image_public_id: string;
 }
 
 export interface marksType {
