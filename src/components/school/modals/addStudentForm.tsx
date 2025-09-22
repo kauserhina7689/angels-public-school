@@ -31,11 +31,11 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createStudent } from "@/server/actions/admin/students";
 import DatePicker from "@/components/common/DatePicker";
 import { bloodGroups, formatDateLocal } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { createStudent } from "@/server/actions/school/student";
 
 export const studentSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -82,11 +82,9 @@ function AddStudentForm({
   classes,
 }: {
   classes: {
-    batch: number;
-    index: number;
+    session: string;
     class_name: string;
     _id: string;
-    students: string[];
   }[];
 }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -108,13 +106,12 @@ function AddStudentForm({
       bloodGroup: "AB−",
     },
   });
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       form.setValue("file", file);
       const url = URL.createObjectURL(file);
       setPreview(url);
-      console.log(url);
       // Optional: cleanup old preview
       return () => URL.revokeObjectURL(url);
     }
@@ -123,7 +120,6 @@ function AddStudentForm({
     const id = toast.loading(`Registering ${data.name}...`);
 
     try {
-      console.log("Form Data:", data);
       const resp = await createStudent(data);
       if (!resp.success) {
         toast.error(resp.message, { id });
@@ -268,13 +264,11 @@ function AddStudentForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {classes
-                          .sort((a, b) => b.index - a.index)
-                          .map((c) => (
-                            <SelectItem key={c._id} value={c._id}>
-                              {c.class_name}
-                            </SelectItem>
-                          ))}
+                        {classes.map((c) => (
+                          <SelectItem key={c._id} value={c._id}>
+                            {c.class_name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

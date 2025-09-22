@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -27,7 +27,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, FileText, Upload, Calendar } from "lucide-react";
+import { Plus, FileText, Upload, Calendar, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const assignments = [
   {
@@ -61,7 +62,29 @@ const assignments = [
 
 export default function AssignmentsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  useEffect(() => {
+    console.log({ file });
+  }, [file]);
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
 
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile && droppedFile.size <= 10 * 1024 * 1024) {
+      setFile(droppedFile);
+    } else {
+      alert("File must be PDF, DOC, or DOCX and ≤ 10MB");
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
       <div className="flex items-center justify-between">
@@ -106,7 +129,7 @@ export default function AssignmentsPage() {
               <div className="space-y-2">
                 <Label htmlFor="class">Select Class</Label>
                 <Select>
-                  <SelectTrigger className="rounded-xl">
+                  <SelectTrigger className="rounded-xl w-full">
                     <SelectValue placeholder="Choose class" />
                   </SelectTrigger>
                   <SelectContent>
@@ -119,18 +142,54 @@ export default function AssignmentsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
+              <div
+                className={cn("space-y-2", isDragging && "bg-green-400/20")}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onClick={() => document.getElementById("file")?.click()}
+              >
                 <Label htmlFor="file">Upload File (Optional)</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    PDF, DOC, DOCX up to 10MB
-                  </p>
-                  <Input id="file" type="file" className="hidden" />
-                </div>
+                {file ? (
+                  <div className="w-full p-2 bg-muted text-muted-foreground flex justify-between items-center ">
+                    <p className="">
+                      {file.name}{" "}
+                      <span className="text-xs ml-2">
+                        {(file.size / (1024 * 1024)).toFixed(2)}MB
+                      </span>
+                    </p>
+                    <Button onClick={() => setFile(null)} variant={"ghost"}>
+                      <X />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      PDF, DOC, DOCX up to 4MB
+                    </p>
+                    <Input
+                      id="file"
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      className="hidden"
+                      onChange={(e) => {
+                        const selectedFile = e.target.files?.[0];
+                        if (
+                          selectedFile &&
+                          selectedFile.size <= 10 * 1024 * 1024
+                        ) {
+                          setFile(selectedFile);
+                        } else {
+                          alert("File must be PDF, DOC, or DOCX and ≤ 10MB");
+                        }
+                      }}
+                    />
+                  </div>
+                )}
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1 rounded-xl">Send Assignment</Button>
@@ -164,8 +223,7 @@ export default function AssignmentsPage() {
                       <span>Class {assignment.class}</span>
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        Posted:{" "}
-                        {new Date(assignment.postDate).toLocaleDateString()}
+                        Posted:Yesterday
                       </div>
                     </CardDescription>
                   </div>

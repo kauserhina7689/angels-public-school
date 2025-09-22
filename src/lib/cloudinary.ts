@@ -38,7 +38,7 @@ export interface CloudinaryUploadResponse {
 // }
 export async function uploadCloudinary(file: File) {
   try {
-    console.log("Uploading file ", file);
+    console.log("Uploading file ", file.name);
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const base64 = buffer.toString("base64");

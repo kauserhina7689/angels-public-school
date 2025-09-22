@@ -8,8 +8,7 @@ export interface studentType {
   mobileNumber: number;
   adhaarNumber: number;
   serialNumber: number;
-  class_id: Types.ObjectId;
-  rollnumber: string;
+  rollnumber: number;
   bloodGroup: string;
   dob: Date;
   image_url: string;
@@ -30,7 +29,7 @@ export interface asssignmentType {
   subject: string;
   title: string;
   description: string;
-  attchment?: string;
+  attachment?: string;
 }
 
 export interface HomeworkType {
@@ -49,8 +48,8 @@ export interface attendanceType {
 export interface ClassType {
   class_name: string;
   students: Types.ObjectId[];
-  batch: number;
-  index: number;
+
+  session: Types.ObjectId;
 }
 
 export interface announcementsType {

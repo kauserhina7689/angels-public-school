@@ -1,8 +1,7 @@
-import { getAllStudents, getClasses } from "@/server/actions/admin/students";
 import StudentsPage from "@/components/school/pages/studentsPage";
+import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 
 export default async function StudentsPageServer() {
-  const students = await getAllStudents();
-  const classes = await getClasses();
-  return <StudentsPage students={students} classes={classes} />;
+  const classes = await getPopulatedClasses();
+  return <StudentsPage classes={classes} />;
 }

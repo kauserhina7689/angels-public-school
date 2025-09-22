@@ -10,7 +10,7 @@ const HomeworkSchema = new Schema<HomeworkDocument>({
       subject: String,
       title: String,
       description: String,
-      attchment: String,
+      attachment: String,
     },
   ],
 });

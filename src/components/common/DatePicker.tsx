@@ -13,15 +13,20 @@ export default function DatePicker({
   onChange,
   value,
   className,
+  futureDateAllowed = false,
 }: {
   onChange?: (date?: Date) => void;
   value?: string;
   className?: string;
+  futureDateAllowed?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(
     value ? new Date(value) : new Date()
   );
+  React.useEffect(() => {
+    if (value) setDate(new Date(value));
+  }, [value]);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -39,7 +44,9 @@ export default function DatePicker({
           mode="single"
           selected={date}
           captionLayout="dropdown"
-          disabled={(d) => d > new Date()}
+          fromYear={2025}
+          toYear={2100}
+          disabled={(d) => !futureDateAllowed && d > new Date()}
           onSelect={(date) => {
             setDate(date);
             setOpen(false);

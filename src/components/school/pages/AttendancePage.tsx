@@ -25,12 +25,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Calendar } from "lucide-react";
-import { FilteredStudentType } from "@/server/actions/admin/students";
 import { cn, formatDateLocal } from "@/lib/utils";
 import { toast } from "sonner";
-import { addAttendanceAction } from "@/server/actions/admin/attendance";
+import { addAttendanceAction } from "@/server/actions/school/attendance";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { FilteredStudentType } from "@/app/school/attendance/page";
 // import { DatePicker } from "@/components/common/DatePicker";
 const DatePicker = dynamic(() => import("@/components/common/DatePicker"), {
   ssr: false,
@@ -49,7 +49,9 @@ export default function AttendancePage({
   date?: string;
 }) {
   const router = useRouter();
-  const [selectedClass, setSelectedClass] = React.useState("Class I");
+  const [selectedClass, setSelectedClass] = React.useState(
+    Object.keys(studentsByClass)[0]
+  );
   const [absentStudents, setAbsentStudents] = React.useState<
     {
       student_id: string;
@@ -203,7 +205,7 @@ export default function AttendancePage({
                         {student.rollnumber}
                       </TableCell>
                       <TableCell>{student.name}</TableCell>
-                      <TableCell>{student.class_name}</TableCell>
+                      <TableCell>{selectedClass}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

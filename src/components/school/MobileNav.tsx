@@ -8,48 +8,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  BookOpen,
-  Calendar,
-  FileText,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  Users,
-} from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import NavLink from "../common/NavBarLink";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-
-const menuItems = [
-  {
-    title: "Dashboard",
-    href: "/school",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Students",
-    href: "/school/students",
-    icon: Users,
-  },
-  {
-    title: "Attendance",
-    href: "/school/attendance",
-    icon: Calendar,
-  },
-  {
-    title: "Marks",
-    href: "/school/marks",
-    icon: BookOpen,
-  },
-  {
-    title: "Assignments",
-    href: "/school/assignments",
-    icon: FileText,
-  },
-];
+import { menuItems } from "./sidebar";
 
 export function MobileNavStudent() {
   const [open, setOpen] = useState(false);

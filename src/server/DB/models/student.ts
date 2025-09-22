@@ -1,12 +1,21 @@
 import { studentType } from "@/lib/types";
-import { Document, Model, Schema, model, models } from "mongoose";
+import { Document, Model, Schema, Types, model, models } from "mongoose";
 import { ClassDocument } from "./Class";
+import { ISession } from "./session";
 
-interface StudentDocument extends studentType, Document {
+export interface StudentDocument extends studentType, Document {
   password: string;
+  classes: {
+    class_id: Types.ObjectId;
+    session_id: Types.ObjectId;
+    rollnumber: string;
+  }[];
 }
-export interface PopulatedStudent extends Omit<StudentDocument, "class_id"> {
-  class_id: Pick<ClassDocument, "_id" | "class_name">;
+export interface PopulatedStudent extends Omit<StudentDocument, "classes"> {
+  classes: {
+    class_id: Pick<ClassDocument, "_id" | "class_name">;
+    session_id: Pick<ISession, "_id" | "name">;
+  }[];
 }
 const StudentSchema = new Schema<StudentDocument>(
   {
@@ -17,8 +26,18 @@ const StudentSchema = new Schema<StudentDocument>(
     mobileNumber: { type: Number, required: true },
     adhaarNumber: { type: Number, required: true, unique: true },
     serialNumber: { type: Number, required: true, unique: true },
-    class_id: { type: Schema.Types.ObjectId, ref: "Class", required: true },
-    rollnumber: { type: String, required: true },
+    classes: [
+      {
+        class_id: { type: Schema.Types.ObjectId, ref: "Class", required: true },
+        session_id: {
+          type: Schema.Types.ObjectId,
+          ref: "Session",
+          required: true,
+        },
+
+        rollnumber: { type: String, required: true },
+      },
+    ],
     password: { type: String, required: true },
     bloodGroup: {
       type: String,
@@ -38,9 +57,10 @@ const StudentSchema = new Schema<StudentDocument>(
   { timestamps: true }
 );
 
-// Add individual indexes
-StudentSchema.index({ class_id: 1 });
 StudentSchema.index({ name: 1 });
-StudentSchema.index({ class_id: 1, rollnumber: 1 }, { unique: true });
+StudentSchema.index(
+  { "classes.class_id": 1, "classes.rollnumber": 1 },
+  { unique: true }
+);
 export const StudentModel: Model<StudentDocument> =
   models.Student || model<StudentDocument>("Student", StudentSchema);

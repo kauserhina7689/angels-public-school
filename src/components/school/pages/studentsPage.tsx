@@ -8,43 +8,27 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
+import { Search, Users, X } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import AddStudentForm from "@/components/school/modals/addStudentForm";
 import "@/server/DB/models/Class";
-import { FilteredStudentType } from "@/server/actions/admin/students";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import AddClassDialog from "../modals/addClass";
+import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 
 function StudentsPage({
-  students,
-  classes,
+  classes: populatedClasses,
 }: {
-  students: FilteredStudentType[];
-  classes: {
-    batch: number;
-    index: number;
-    class_name: string;
-    _id: string;
-    students: string[];
-  }[];
+  classes: Awaited<ReturnType<typeof getPopulatedClasses>>;
 }) {
   const [query, setQuery] = useState("");
   const handleReset = () => {
     setQuery("");
   };
-  const filteredStudents = students.filter(
-    (student) =>
-      student.name.toLowerCase().includes(query.toLowerCase()) ||
-      student.rollnumber.toLowerCase().includes(query.toLowerCase()) ||
-      student.fatherName.toLowerCase().includes(query.toLowerCase()) ||
-      student.class_name.toLowerCase().includes(query.toLowerCase())
-  );
-  const studentsByClass = filteredStudents!.reduce((acc, student) => {
-    if (!acc[student.class_name]) acc[student.class_name] = [];
-    acc[student.class_name]!.push(student);
-    return acc;
-  }, {} as Record<string, typeof students>);
+  const classes = populatedClasses.map(({ _id, session, class_name }) => ({
+    _id,
+    session,
+    class_name,
+  }));
 
   return (
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
@@ -75,57 +59,95 @@ function StudentsPage({
           )}
         </form>
         <div className="flex items-center gap-4 grow  md:justify-end">
-          <AddClassDialog />
           <AddStudentForm classes={classes} />
         </div>
       </div>
 
       <div className="space-y-10">
-        {Object.entries(studentsByClass).map(([className, classStudents]) => (
-          <div key={className}>
+        {populatedClasses.map(({ class_name, students }) => (
+          <div key={class_name}>
             <h2 className="text-2xl font-semibold mb-4 text-primary">
-              {className}
+              {class_name}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {classStudents!.map((student) => (
-                <Card
-                  key={student._id}
-                  className="rounded-xl shadow-sm hover:shadow-md transition"
-                >
-                  <CardHeader>
-                    <div className="flex space-x-4 items-center">
-                      <Avatar className="h-14 w-14 ">
-                        <AvatarImage
-                          src={student.image_url}
-                          className="object-cover w-full h-full"
-                        />
-                        <AvatarFallback className=" text-white text-sm bg-primary">
-                          {student.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-lg">
-                          {student.name}
-                        </CardTitle>
-                        <CardDescription>
-                          <strong>Class:</strong> {student.class_name}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="text-sm text-muted-foreground">
-                    <p className="flex justify-between">
-                      <strong>Roll No:</strong> {student.rollnumber}
-                    </p>
-                    <p className="flex justify-between">
-                      <strong>Father Name:</strong> {student.fatherName}
+              {students!.filter(
+                (student) =>
+                  student.name.toLowerCase().includes(query.toLowerCase()) ||
+                  student.rollnumber
+                    .toLowerCase()
+                    .includes(query.toLowerCase()) ||
+                  student.fatherName
+                    .toLowerCase()
+                    .includes(query.toLowerCase()) ||
+                  class_name.toLowerCase().includes(query.toLowerCase())
+              ).length == 0 ? (
+                <Card className="col-span-full border-none shadow-none flex items-center justify-center p-10">
+                  <CardContent className="flex flex-col items-center text-muted-foreground">
+                    <Users className="h-10 w-10 mb-3 opacity-60" />
+                    <p>
+                      {!query
+                        ? "No student in this class"
+                        : "No students found for the current search in this class"}
                     </p>
                   </CardContent>
                 </Card>
-              ))}
+              ) : (
+                <>
+                  {students!
+                    .filter(
+                      (student) =>
+                        student.name
+                          .toLowerCase()
+                          .includes(query.toLowerCase()) ||
+                        student.rollnumber
+                          .toLowerCase()
+                          .includes(query.toLowerCase()) ||
+                        student.fatherName
+                          .toLowerCase()
+                          .includes(query.toLowerCase()) ||
+                        class_name.toLowerCase().includes(query.toLowerCase())
+                    )
+                    .map((student) => (
+                      <Card
+                        key={student._id}
+                        className="rounded-xl shadow-sm hover:shadow-md transition"
+                      >
+                        <CardHeader>
+                          <div className="flex space-x-4 items-center">
+                            <Avatar className="h-14 w-14 ">
+                              <AvatarImage
+                                src={student.image_url}
+                                className="object-cover w-full h-full"
+                              />
+                              <AvatarFallback className=" text-white text-sm bg-primary">
+                                {student.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <CardTitle className="text-lg">
+                                {student.name}
+                              </CardTitle>
+                              <CardDescription>
+                                <strong>Class:</strong> {class_name}
+                              </CardDescription>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="text-sm text-muted-foreground">
+                          <p className="flex justify-between">
+                            <strong>Roll No:</strong> {student.rollnumber}
+                          </p>
+                          <p className="flex justify-between">
+                            <strong>Father Name:</strong> {student.fatherName}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                </>
+              )}
             </div>
           </div>
         ))}

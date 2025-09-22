@@ -7,15 +7,22 @@ import {
   FileText,
   Users,
   BookOpen,
+  NotebookPen,
+  ClipboardCheck,
 } from "lucide-react";
 import NavLink from "../common/NavBarLink";
 import { LogoutDialog } from "../common/logoutDialog";
 
-const menuItems = [
+export const menuItems = [
   {
     title: "Dashboard",
     href: "/school",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Sessions",
+    href: "/school/sessions",
+    icon: Calendar,
   },
   {
     title: "Students",
@@ -23,9 +30,14 @@ const menuItems = [
     icon: Users,
   },
   {
+    title: "Classes",
+    href: "/school/classes",
+    icon: NotebookPen,
+  },
+  {
     title: "Attendance",
     href: "/school/attendance",
-    icon: Calendar,
+    icon: ClipboardCheck,
   },
   {
     title: "Marks",

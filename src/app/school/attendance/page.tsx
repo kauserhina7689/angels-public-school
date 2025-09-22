@@ -1,18 +1,30 @@
 import AttendancePage from "@/components/school/pages/AttendancePage";
-import { getAttendanceByDay } from "@/server/actions/admin/attendance";
-import { getAllStudents } from "@/server/actions/admin/students";
-
+import { getAttendanceByDay } from "@/server/actions/school/attendance";
+import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+export interface FilteredStudentType {
+  _id: string;
+  class_id: string;
+  name: string;
+  fatherName: string;
+  motherName: string;
+  address: string;
+  mobileNumber: number;
+  adhaarNumber: number;
+  serialNumber: number;
+  rollnumber: string;
+  image_url: string;
+  image_public_id: string;
+}
 async function AttendancePageServer({
   searchParams,
 }: {
   searchParams: Promise<{ date: string }>;
 }) {
-  const students = await getAllStudents();
-  const studentsByClass = students!.reduce((acc, student) => {
-    if (!acc[student.class_name]) acc[student.class_name] = [];
-    acc[student.class_name]!.push(student);
+  const populatedClasses = await getPopulatedClasses();
+  const studentsByClass = populatedClasses!.reduce((acc, cls) => {
+    acc[cls.class_name] = cls.students;
     return acc;
-  }, {} as Record<string, typeof students>);
+  }, {} as Record<string, FilteredStudentType[]>);
   const { date } = await searchParams;
   const attendance = (await getAttendanceByDay(date)) || [];
   return (

@@ -11,8 +11,18 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { MobileNavStudent } from "./MobileNav";
 import { LogoutDialog } from "../common/logoutDialog";
+import SessionSelector from "../common/sessionSelector";
+import { getSessions } from "@/server/actions/admin/getdata";
+import { getCurrentSession } from "@/server/actions/school/session";
 
-function SchoolHeader() {
+async function SchoolHeader() {
+  const [sessionsResult, currentSessionResult] = await Promise.all([
+    getSessions(),
+    getCurrentSession(),
+  ]);
+
+  const { sessions } = sessionsResult;
+  const currentSessionId = currentSessionResult;
   return (
     <header className=" shrink-0 flex h-16 items-center gap-4 px-4 lg:px-10">
       <MobileNavStudent />
@@ -28,7 +38,7 @@ function SchoolHeader() {
         {/* )} */}
       </div>
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-5">
         {/* Profile Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -51,6 +61,12 @@ function SchoolHeader() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <SessionSelector
+                currentSessionId={currentSessionId}
+                sessions={sessions}
+              />
+            </DropdownMenuItem>
             {/* <DropdownMenuItem onClick={insertDummyStudents}>
               <User className="mr-2 h-4 w-4" />
               Create classes

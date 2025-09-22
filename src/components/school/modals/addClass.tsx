@@ -23,8 +23,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import z from "zod";
-import { createClass } from "@/server/actions/admin/students";
 import { Input } from "@/components/ui/input";
+import { createClass } from "@/server/actions/school/getClasses";
+import { useRouter } from "next/navigation";
 // class_name: { type: String, required: true, unique: true },
 //     // batch: { type: Number, required: true },
 //     students: [{ type: Schema.Types.ObjectId, ref: "Student" }],
@@ -35,6 +36,7 @@ export const classFormSchema = z.object({
 export type classFormData = z.infer<typeof classFormSchema>;
 function AddClassDialog() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<classFormData>({
     resolver: zodResolver(classFormSchema),
@@ -61,6 +63,7 @@ function AddClassDialog() {
       }
       toast.success(resp.message, { id });
       form.reset();
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong", { id });
       console.log("error while registering student ", error);
