@@ -3,7 +3,7 @@
 import { connectDB } from "@/server/DB";
 import { getCurrentSession } from "./session";
 import { ClassModel } from "@/server/DB/models/Class";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { classFormData } from "@/components/school/modals/addClass";
 import { StudentDocument, StudentModel } from "@/server/DB/models/student";
 // interface PopulatedClass {
@@ -35,13 +35,16 @@ export async function getClasses() {
     const classes = await ClassModel.find({ session }).select(
       "-__v -createdAt -updatedAt"
     );
-    return classes.map(({ students, _id, session, class_name }) => ({
+    return classes.map(({ students, _id, session, class_name, subjects }) => ({
       session: (session as mongoose.Types.ObjectId).toString(),
       class_name,
       _id: (_id as mongoose.Types.ObjectId).toString(),
       students: (students as unknown as mongoose.Types.ObjectId[]).map((st) =>
         st.toString()
       ),
+      subjects: subjects.map(({ name, _id }) => {
+        return { name, _id: _id!.toString() };
+      }),
     }));
   } catch (error) {
     console.log(error);
@@ -113,8 +116,38 @@ export async function createClass(data: classFormData) {
   try {
     await connectDB();
     const session = await getCurrentSession();
-    await ClassModel.create({ ...data, session });
-    return { success: true, message: "Added class successfully", errors: [] };
+    console.table(data.subjects);
+    if (data._id == "new") {
+      await ClassModel.create({ ...data, session });
+      return { success: true, message: "Added class successfully", errors: [] };
+    } else {
+      const updated = await ClassModel.findByIdAndUpdate(
+        data._id,
+        {
+          class_name: data.class_name,
+        },
+        { new: true }
+      );
+      if (!updated) {
+        return { success: false, message: "Class not found", errors: [] };
+      }
+      const newSubjects = data.subjects.filter(
+        (s) => !mongoose.Types.ObjectId.isValid(s._id)
+      );
+      const oldSubjects = data.subjects
+        .filter((s) => mongoose.Types.ObjectId.isValid(s._id))
+        .map((s) => ({ ...s, _id: new Types.ObjectId(s._id) }));
+      updated.subjects = oldSubjects;
+
+      newSubjects.forEach((s) => updated.subjects.push({ name: s.name }));
+
+      await updated.save();
+      return {
+        success: true,
+        message: "Updated class successfully",
+        errors: [],
+      };
+    }
     // eslint-disable-next-line
   } catch (error: any) {
     console.log(error);

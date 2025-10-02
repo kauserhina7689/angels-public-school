@@ -34,3 +34,9 @@ export const bloodGroups = [
   "O+",
   "O−",
 ] as const;
+export const examTypes = {
+  unitTest1: "Unit Test 1",
+  unitTest2: "Unit Test 2",
+  halfYearlyExam: "Half-Yearly Exam",
+  annualFinal: "Annual Exam",
+} as const;

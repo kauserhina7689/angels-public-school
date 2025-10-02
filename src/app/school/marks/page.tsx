@@ -39,10 +39,8 @@ import { Plus, BookOpen } from "lucide-react";
 const examTypes = [
   "Unit Test 1",
   "Unit Test 2",
-  "Unit Test 3",
-  "Unit Test 4",
   "Half-Yearly Exam",
-  "Final Exam",
+  "Annual Exam",
 ];
 
 const subjects = [
