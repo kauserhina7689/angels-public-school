@@ -18,7 +18,7 @@ export interface studentType {
 export interface marksType {
   student_id: Types.ObjectId;
   class_id: Types.ObjectId;
-  subject: string;
+  subject_id: string;
   max: number;
   obtained: number;
   examType: string;

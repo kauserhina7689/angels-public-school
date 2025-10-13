@@ -172,7 +172,7 @@ function AddStudentForm({
   return (
     <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl ">
+        <Button className="rounded-xl w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Student
         </Button>

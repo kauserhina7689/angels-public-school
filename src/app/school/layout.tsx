@@ -15,7 +15,7 @@ async function SchoolLayout({ children }: { children: React.ReactNode }) {
       <SchoolHeader></SchoolHeader>
       <section className="grow border flex overflow-hidden">
         <SchoolSidebar />
-        <main className="h-full overflow-hidden p-2 grow">{children}</main>
+        <main className="h-full p-2 overflow-x-hidden grow">{children}</main>
       </section>
     </div>
   );

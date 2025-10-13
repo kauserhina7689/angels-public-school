@@ -118,7 +118,13 @@ export async function createClass(data: classFormData) {
     const session = await getCurrentSession();
     console.table(data.subjects);
     if (data._id == "new") {
-      await ClassModel.create({ ...data, session });
+      console.log("creating new class");
+
+      await ClassModel.create({
+        class_name: data.class_name,
+        subjects: data.subjects.map((s) => ({ name: s.name })),
+        session,
+      });
       return { success: true, message: "Added class successfully", errors: [] };
     } else {
       const updated = await ClassModel.findByIdAndUpdate(

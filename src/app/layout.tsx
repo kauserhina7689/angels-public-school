@@ -14,7 +14,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background  w-screen h-svh overflow-hidden">
+      <body className="bg-background w-screen h-svh ">
         <Toaster position="top-center" />
         {children}
       </body>

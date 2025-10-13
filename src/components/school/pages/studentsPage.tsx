@@ -34,8 +34,8 @@ function StudentsPage({
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
       <div className="flex border-b z-10 pb-2 sticky top-0  flex-col bg-background sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Manage Students</h1>
-          <p className="text-muted-foreground">
+          <h3 className="hidden md:block">Manage Students</h3>
+          <p className="text-muted-foreground hidden md:block">
             View students by class and add new student accounts
           </p>
         </div>

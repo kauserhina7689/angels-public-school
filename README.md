@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 School Management Dashboard
 
-## Getting Started
+A scalable School Management System built with Next.js that enables admins to manage students, classes, attendance, and subjects seamlessly. This dashboard also supports profile picture uploads using Cloudinary and provides a clean, responsive UI for efficient school data management.
 
-First, run the development server:
+##🚀 Features
 
-```bash
+Authentication & Admin Dashboard
+
+Secure login with environment-based admin credentials
+
+JWT authentication for API protection
+
+Student Management
+
+Add and update student profiles with photo upload (Cloudinary integration)
+
+Maintain student records across sessions
+
+Class & Subject Management
+
+Create and manage classes for each session
+
+Assign subjects to classes
+
+Attendance Tracking
+
+Mark daily attendance for students
+
+Track class-wise attendance
+
+Scalable Structure
+
+Modular API integration with Next.js API routes
+
+MongoDB database for persistence
+
+Cloudinary for secure file storage
+
+##🛠️ Tech Stack
+
+Frontend & Backend: Next.js (Full-stack)
+
+Database: MongoDB (Mongoose ODM)
+
+Authentication: JWT-based auth
+
+File Uploads: Cloudinary
+
+Styling: Tailwind CSS / ShadCN UI
+
+Password Hashing: bcrypt
+
+##⚙️ Environment Variables
+
+Create a .env.local file in the root directory and configure the following:
+
+ADMIN_PHONENUMBER=1234567890
+ADMIN_PASSWORD=password
+ADMIN_ID=123123123
+ADMIN_NAME=Admin
+MONGO_URI=your_mongo_connection_string
+JWT_SECRET=your_super_secure_secret_key
+CLOUDINARY_SECRET=your_cloudinary_secret
+CLOUDINARY_KEY=your_cloudinary_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+
+##▶️ Getting Started
+
+Clone the repository
+
+git clone https://github.com/your-username/school-management-dashboard.git
+cd school-management-dashboard
+
+Install dependencies
+
+npm install
+
+# or
+
+yarn install
+
+Setup environment variables
+Create a .env.local file and add the required variables (see above).
+
+Run the development server
+
 npm run dev
+
 # or
+
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in browser
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📂 Project Structure
+school-management-dashboard/
+│
+├── app/ # Next.js app router pages
+├── components/ # Reusable UI components
+├── lib/ # Utility functions (auth, db, cloudinary, etc.)
+├── models/ # Mongoose models (Student, Class, Session, Subject)
+├── public/ # Static assets
+├── .env.local # Environment variables
+└── README.md # Project documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📌 API Endpoints
+Auth
 
-## Learn More
+POST /api/auth/login – Login with admin credentials
 
-To learn more about Next.js, take a look at the following resources:
+Students
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+POST /api/students – Add a student (with profile pic)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+GET /api/students – Fetch all students
 
-## Deploy on Vercel
+PATCH /api/students/:id – Update student details
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+DELETE /api/students/:id – Remove a student
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Classes & Subjects
+
+POST /api/classes – Create a new class for a session
+
+POST /api/subjects – Add subjects to a class
+
+GET /api/classes/:sessionId – Get classes for a session
+
+Attendance
+
+POST /api/attendance – Mark attendance
+
+GET /api/attendance/:classId – Fetch attendance for a class
+
+##🔒 Security & Scalability
+
+Environment variables secured in .env.local
+
+JWT authentication for protected APIs
+
+Modular architecture for scaling with more features (fees, exams, parent portal, etc.)
+
+##📜 License
+
+This project is licensed under the MIT License.

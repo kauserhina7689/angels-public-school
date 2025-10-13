@@ -131,8 +131,8 @@ export default function AttendancePage({
   return (
     <div className="sm:p-6 space-y-6 h-full overflow-y-auto">
       <div>
-        <h1 className="text-3xl font-bold">Mark Attendance</h1>
-        <p className="text-muted-foreground">
+        <h3 className="hidden md:block">Mark Attendance</h3>
+        <p className="text-muted-foreground hidden md:block">
           Select a class and date to mark students as Present or Absent
         </p>
       </div>

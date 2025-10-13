@@ -167,6 +167,7 @@ function AddClassDialog({
                     {form.formState.errors.subjects && (
                       <p className="text-sm text-destructive">
                         {
+                          // eslint-disable-next-line
                           (form.formState.errors.subjects as any).subjects
                             ?.message
                         }
