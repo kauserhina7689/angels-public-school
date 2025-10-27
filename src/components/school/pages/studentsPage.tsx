@@ -123,7 +123,7 @@ function StudentsPage({
                           className="rounded-xl shadow-sm hover:shadow-md transition"
                         >
                           <CardHeader>
-                            <div className="flex space-x-4 items-center border">
+                            <div className="flex space-x-4 items-center">
                               <Avatar className="h-14 w-14 ">
                                 <AvatarImage
                                   src={student.image_url}
