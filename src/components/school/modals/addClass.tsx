@@ -116,7 +116,6 @@ function AddClassDialog({
       onOpenChange={(state) => {
         setIsAddModalOpen(state);
         if (!state) {
-          setSelectedClass(null);
           form.reset({ class_name: "", subjects: [] });
         }
       }}

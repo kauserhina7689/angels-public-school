@@ -4,7 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit, Users } from "lucide-react";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 export interface classType {
   session: string;
   class_name: string;
@@ -20,6 +22,11 @@ function ClassesPage({ classes }: { classes: classType[] }) {
   const [selectedClass, setSelectedClass] = useState<classType | null>(
     classes.at(-1) || null
   );
+  const searchParams = useSearchParams();
+  const errMessage = searchParams.get("message");
+  useEffect(() => {
+    toast.error(errMessage);
+  }, []);
   return (
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
       <header className="flex border-b z-10 pb-2 sticky top-0  flex-col bg-background sm:flex-row sm:items-center justify-between gap-4">
@@ -38,7 +45,7 @@ function ClassesPage({ classes }: { classes: classType[] }) {
         <Card className="col-span-full h-[40svh] border-none shadow-none flex items-center justify-center p-10">
           <CardContent className="flex flex-col items-center text-muted-foreground">
             <Users className="h-10 w-10 mb-3 opacity-60" />
-            <p>No classes added for the current session</p>
+            {errMessage ?? <p>No classes added for the current session</p>}
           </CardContent>
         </Card>
       ) : (

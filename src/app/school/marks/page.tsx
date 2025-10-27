@@ -1,6 +1,7 @@
 import MarkspageSelector from "@/components/school/buttons/MarkspageSelector";
 import MarksPage from "@/components/school/pages/Marks.page";
 import { Card } from "@/components/ui/card";
+import { getSessions } from "@/server/actions/admin/getdata";
 import { getClasses } from "@/server/actions/school/getClasses";
 import { getMarks } from "@/server/actions/school/marks";
 import mongoose from "mongoose";
@@ -15,7 +16,15 @@ export default async function MarksPageServer({
     exam: string;
   }>;
 }) {
+  const sessions = await getSessions();
+
+  if (sessions.sessions.length == 0)
+    redirect("/school/sessions?message=Please create a session first");
   const classes = await getClasses();
+  if (classes.length == 0)
+    redirect(
+      "/school/classes?message=Please add classes to the current session"
+    );
   const params = await searchParams;
   console.log({ params });
   const resp = await getMarks(params);

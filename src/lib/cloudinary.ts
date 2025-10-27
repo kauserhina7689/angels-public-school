@@ -1,5 +1,4 @@
 "use server";
-// lib/cloudinary.ts
 import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
@@ -13,29 +12,6 @@ export interface CloudinaryUploadResponse {
   secure_url: string;
 }
 
-// export async function uploadCloudinary(file: File) {
-//   try {
-//     const buffer = Buffer.from(await file.arrayBuffer());
-//     const uploadRes = await new Promise<CloudinaryUploadResponse>(
-//       (resolve, reject) => {
-//         cloudinary.uploader
-//           .upload_stream({ resource_type: "auto" }, (error, result) => {
-//             if (error) return reject(error);
-//             resolve({
-//               public_id: result!.public_id,
-//               secure_url: result!.secure_url,
-//               resource_type: result!.resource_type as "image" | "video" | "raw",
-//             });
-//           })
-//           .end(buffer);
-//       }
-//     );
-//     return uploadRes;
-//   } catch (error) {
-//     console.log(error);
-//     throw error;
-//   }
-// }
 export async function uploadCloudinary(file: File) {
   try {
     console.log("Uploading file ", file.name);

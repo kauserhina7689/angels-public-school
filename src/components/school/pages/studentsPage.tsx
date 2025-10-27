@@ -8,12 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search, Users, X } from "lucide-react";
+import { Edit, Search, Users, X } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import AddStudentForm from "@/components/school/modals/addStudentForm";
 import "@/server/DB/models/Class";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+import { studentType } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 function StudentsPage({
   classes: populatedClasses,
@@ -21,6 +23,9 @@ function StudentsPage({
   classes: Awaited<ReturnType<typeof getPopulatedClasses>>;
 }) {
   const [query, setQuery] = useState("");
+  const [currentStudent, setCurrentStudent] = useState<
+    (studentType & { class_id: string; _id: string }) | null
+  >(null);
   const handleReset = () => {
     setQuery("");
   };
@@ -59,12 +64,16 @@ function StudentsPage({
           )}
         </form>
         <div className="flex items-center gap-4 grow  md:justify-end">
-          <AddStudentForm classes={classes} />
+          <AddStudentForm
+            currentStudent={currentStudent}
+            setCurrentStudent={setCurrentStudent}
+            classes={classes}
+          />
         </div>
       </div>
 
       <div className="space-y-10">
-        {populatedClasses.map(({ class_name, students }) => (
+        {populatedClasses.map(({ class_name, students, _id }) => (
           <div key={class_name}>
             <h2 className="text-2xl font-semibold mb-4 text-primary">
               {class_name}
@@ -107,45 +116,60 @@ function StudentsPage({
                           .includes(query.toLowerCase()) ||
                         class_name.toLowerCase().includes(query.toLowerCase())
                     )
-                    .map((student) => (
-                      <Card
-                        key={student._id}
-                        className="rounded-xl shadow-sm hover:shadow-md transition"
-                      >
-                        <CardHeader>
-                          <div className="flex space-x-4 items-center">
-                            <Avatar className="h-14 w-14 ">
-                              <AvatarImage
-                                src={student.image_url}
-                                className="object-cover w-full h-full"
-                              />
-                              <AvatarFallback className=" text-white text-sm bg-primary">
-                                {student.name
-                                  .split(" ")
-                                  .map((n) => n[0])
-                                  .join("")}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <CardTitle className="text-lg">
-                                {student.name}
-                              </CardTitle>
-                              <CardDescription>
-                                <strong>Class:</strong> {class_name}
-                              </CardDescription>
+                    .map((student) => {
+                      return (
+                        <Card
+                          key={student._id}
+                          className="rounded-xl shadow-sm hover:shadow-md transition"
+                        >
+                          <CardHeader>
+                            <div className="flex space-x-4 items-center border">
+                              <Avatar className="h-14 w-14 ">
+                                <AvatarImage
+                                  src={student.image_url}
+                                  className="object-cover w-full h-full"
+                                />
+                                <AvatarFallback className=" text-white text-sm bg-primary">
+                                  {student.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <CardTitle className="text-lg">
+                                  {student.name}
+                                </CardTitle>
+                                <CardDescription>
+                                  <strong>Class:</strong> {class_name}
+                                </CardDescription>
+                              </div>
+                              <Button
+                                variant={"ghost"}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCurrentStudent({
+                                    ...student,
+                                    class_id: _id,
+                                    rollnumber: Number(student.rollnumber),
+                                  });
+                                }}
+                              >
+                                <Edit />
+                              </Button>
                             </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="text-sm text-muted-foreground">
-                          <p className="flex justify-between">
-                            <strong>Roll No:</strong> {student.rollnumber}
-                          </p>
-                          <p className="flex justify-between">
-                            <strong>Father Name:</strong> {student.fatherName}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardHeader>
+                          <CardContent className="text-sm text-muted-foreground">
+                            <p className="flex justify-between">
+                              <strong>Roll No:</strong> {student.rollnumber}
+                            </p>
+                            <p className="flex justify-between">
+                              <strong>Father Name:</strong> {student.fatherName}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
                 </>
               )}
             </div>

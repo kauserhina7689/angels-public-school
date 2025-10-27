@@ -4,7 +4,6 @@ import React from "react";
 
 async function SessionsPageServer() {
   const resp = await getSessions();
-
   return <SessionsPage {...resp} />;
 }
 

@@ -9,7 +9,16 @@ export interface studentType {
   adhaarNumber: number;
   serialNumber: number;
   rollnumber: number;
-  bloodGroup: string;
+  bloodGroup:
+    | "A+"
+    | "A−"
+    | "B+"
+    | "B−"
+    | "AB+"
+    | "AB−"
+    | "O+"
+    | "O−"
+    | undefined;
   dob: Date;
   image_url: string;
   image_public_id: string;

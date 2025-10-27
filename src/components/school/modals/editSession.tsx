@@ -29,6 +29,7 @@ import { z } from "zod";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { saveSession } from "@/server/actions/school/session";
+import { useRouter } from "next/navigation";
 
 export const sessionSchema = z
   .object({
@@ -71,6 +72,7 @@ function SessionEditFormModal({
       _id: currentSession?._id || "new",
     },
   });
+  const router = useRouter();
   useEffect(() => {
     if (currentSession) {
       form.reset({
@@ -89,6 +91,8 @@ function SessionEditFormModal({
         toast.error(resp.message, { id });
       }
       toast.success(resp.message, { id });
+      setCurrentSession(null);
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong please try again");
       console.log({ error });

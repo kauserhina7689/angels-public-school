@@ -49,7 +49,7 @@ function MarkspageSelector({
     setSelectedSubject(
       classes.find((c) => c._id == selectedClass)?.subjects[0]?._id || ""
     );
-  }, [selectedClass]);
+  }, [selectedClass, classes]);
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 

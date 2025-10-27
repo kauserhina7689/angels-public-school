@@ -5,6 +5,8 @@ import SessionEditFormModal, { sessionType } from "../modals/editSession";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, CalendarCheck, CalendarClock, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 function SessionsPage({
   sessions,
   message,
@@ -22,9 +24,13 @@ function SessionsPage({
   const [currentSession, setCurrentSession] = useState<sessionType | null>(
     null
   );
+  const searchParams = useSearchParams();
+  const errMessage = searchParams.get("message");
   useEffect(() => {
+    toast.error(errMessage);
+
     console.log({ currentSession, sessions });
-  }, [currentSession]);
+  }, []);
 
   return (
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
