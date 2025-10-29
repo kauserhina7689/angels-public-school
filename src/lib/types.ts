@@ -72,3 +72,28 @@ export interface admintype {
   name: string;
   number: number;
 }
+
+export class CustomError extends Error {
+  title?: string;
+  redirectUrl?: string;
+  redirectLabel?: string;
+  statusCode?: number;
+  digest?: string;
+
+  constructor(
+    message: string,
+    options?: {
+      title?: string;
+      redirectUrl?: string;
+      redirectLabel?: string;
+      statusCode?: number;
+    }
+  ) {
+    super(message);
+    this.name = "CustomError";
+    this.title = options?.title;
+    this.redirectUrl = options?.redirectUrl;
+    this.redirectLabel = options?.redirectLabel;
+    this.statusCode = options?.statusCode;
+  }
+}

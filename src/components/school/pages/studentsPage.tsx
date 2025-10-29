@@ -16,6 +16,7 @@ import { AvatarImage } from "@radix-ui/react-avatar";
 import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 import { studentType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 function StudentsPage({
   classes: populatedClasses,
@@ -23,6 +24,7 @@ function StudentsPage({
   classes: Awaited<ReturnType<typeof getPopulatedClasses>>;
 }) {
   const [query, setQuery] = useState("");
+  const router = useRouter();
   const [currentStudent, setCurrentStudent] = useState<
     (studentType & { class_id: string; _id: string }) | null
   >(null);
@@ -121,6 +123,9 @@ function StudentsPage({
                         <Card
                           key={student._id}
                           className="rounded-xl shadow-sm hover:shadow-md transition"
+                          onClick={() =>
+                            router.push(`/school/students/${student._id}`)
+                          }
                         >
                           <CardHeader>
                             <div className="flex space-x-4 items-center">

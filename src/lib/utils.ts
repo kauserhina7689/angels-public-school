@@ -40,3 +40,26 @@ export const examTypes = {
   halfYearlyExam: "Half-Yearly Exam",
   annualFinal: "Annual Exam",
 } as const;
+export const formatDateFrontend = (date: string | Date): string => {
+  const dateObject = typeof date === "string" ? new Date(date) : date;
+
+  return dateObject.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+export const calculateAge = (dob: string | Date): number => {
+  const today = new Date();
+  const birthDate = typeof dob === "string" ? new Date(dob) : dob;
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};

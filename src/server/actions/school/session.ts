@@ -69,11 +69,16 @@ export async function saveSession(session: SessionType) {
 export async function setCurrentSession(_id: string) {
   try {
     const cookieStore = await cookies();
+    const session = await Session.findById(_id);
+    if (!session) {
+      console.log("session not found");
+    } else {
+      console.log("coorect session id: ", _id);
+    }
     cookieStore.set("session", _id, { maxAge: 1000 * 60 * 60 * 24 * 7 });
     return true;
   } catch (error) {
     console.log({ error });
-
     return false;
   }
 }
@@ -81,6 +86,8 @@ export async function getCurrentSession() {
   try {
     const cookieStore = await cookies();
     const session = cookieStore.get("session")?.value;
+    console.log({ session });
+
     return session;
   } catch (error) {
     console.log({ error });

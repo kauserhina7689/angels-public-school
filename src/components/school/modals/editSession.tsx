@@ -28,7 +28,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { saveSession } from "@/server/actions/school/session";
+import {
+  saveSession,
+  setCurrentSession as setCurrentSessionServer,
+} from "@/server/actions/school/session";
 import { useRouter } from "next/navigation";
 
 export const sessionSchema = z
@@ -92,6 +95,7 @@ function SessionEditFormModal({
       }
       toast.success(resp.message, { id });
       setCurrentSession(null);
+      await setCurrentSessionServer(resp.session!._id);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong please try again");

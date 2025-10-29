@@ -106,8 +106,8 @@ async function createStudent({
       image_url: secure_url,
       classes: [
         {
-          class_id: class_id,
-          session_id: currentSession,
+          class_id: new mongoose.Types.ObjectId(class_id),
+          session_id: new mongoose.Types.ObjectId(currentSession),
           rollnumber: rollnumber,
         },
       ],

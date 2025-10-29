@@ -15,6 +15,7 @@ export interface PopulatedStudent extends Omit<StudentDocument, "classes"> {
   classes: {
     class_id: Pick<ClassDocument, "_id" | "class_name">;
     session_id: Pick<ISession, "_id" | "name">;
+    rollnumber: string;
   }[];
 }
 const StudentSchema = new Schema<StudentDocument>(
