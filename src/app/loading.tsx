@@ -54,25 +54,6 @@ export default function SchoolSplashScreen() {
 
       {/* Bottom Wave Decoration */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/10 to-transparent"></div>
-
-      {/* Additional CSS for custom animations */}
-      <style jsx>{`
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 0.6;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-        .delay-700 {
-          animation-delay: 700ms;
-        }
-        .delay-1000 {
-          animation-delay: 1000ms;
-        }
-      `}</style>
     </div>
   );
 }
