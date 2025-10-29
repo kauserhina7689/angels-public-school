@@ -27,10 +27,8 @@ function SessionsPage({
   const searchParams = useSearchParams();
   const errMessage = searchParams.get("message");
   useEffect(() => {
-    toast.error(errMessage);
-
-    console.log({ currentSession, sessions });
-  }, []);
+    if (errMessage) toast.error(errMessage);
+  }, [errMessage]);
 
   return (
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">

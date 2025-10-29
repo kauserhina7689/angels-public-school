@@ -19,14 +19,12 @@ export interface classType {
 }
 
 function ClassesPage({ classes }: { classes: classType[] }) {
-  const [selectedClass, setSelectedClass] = useState<classType | null>(
-    classes.at(-1) || null
-  );
+  const [selectedClass, setSelectedClass] = useState<classType | null>(null);
   const searchParams = useSearchParams();
   const errMessage = searchParams.get("message");
   useEffect(() => {
-    toast.error(errMessage);
-  }, []);
+    if (errMessage) toast.error(errMessage);
+  }, [errMessage]);
   return (
     <div className="p-6 pt-0 space-y-6 h-full relative overflow-y-auto">
       <header className="flex border-b z-10 pb-2 sticky top-0  flex-col bg-background sm:flex-row sm:items-center justify-between gap-4">

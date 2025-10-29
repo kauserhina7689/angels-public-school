@@ -33,7 +33,12 @@ export function MobileNavStudent() {
           <nav className="space-y-2 flex flex-col ">
             {menuItems.map((item) => {
               return (
-                <Button key={item.href} variant={"ghost"} asChild>
+                <Button
+                  key={item.href}
+                  variant={"ghost"}
+                  asChild
+                  onClick={() => setOpen(false)}
+                >
                   <NavLink
                     href={item.href}
                     activeClassname="text-primary border border-primary bg-primary/10"

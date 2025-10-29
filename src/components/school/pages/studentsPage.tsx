@@ -77,8 +77,12 @@ function StudentsPage({
       <div className="space-y-10">
         {populatedClasses.map(({ class_name, students, _id }) => (
           <div key={class_name}>
-            <h2 className="text-2xl font-semibold mb-4 text-primary">
-              {class_name}
+            <h2 className="text-2xl font-semibold mb-4 text-primary flex">
+              {class_name}{" "}
+              <span className="flex items-center text-sm text-muted-foreground ml-5">
+                <Users className="h-6 w-6 p-1 aspect-square" />
+                {students.length}
+              </span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {students!.filter(
