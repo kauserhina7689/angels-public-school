@@ -33,13 +33,9 @@ export function MobileNavStudent() {
           <nav className="space-y-2 flex flex-col ">
             {menuItems.map((item) => {
               return (
-                <Button
-                  key={item.href}
-                  variant={"ghost"}
-                  asChild
-                  onClick={() => setOpen(false)}
-                >
+                <Button key={item.href} variant={"ghost"} asChild>
                   <NavLink
+                    onClick={() => setOpen(false)}
                     href={item.href}
                     activeClassname="text-primary border border-primary bg-primary/10"
                     classname="w-full px-3 py-2 hover:bg-primary/10 text-gray-600 hover:text-primary h-11 duration-200 hover:border transition-all hover:border-primary rounded-sm flex text-sm items-center gap-2"

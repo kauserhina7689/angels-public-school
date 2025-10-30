@@ -122,6 +122,14 @@ function StudentsPage({
                           .includes(query.toLowerCase()) ||
                         class_name.toLowerCase().includes(query.toLowerCase())
                     )
+                    .sort((a, b) => {
+                      const rollA = Number(a.rollnumber);
+                      const rollB = Number(b.rollnumber);
+                      if (!isNaN(rollA) && !isNaN(rollB)) {
+                        return rollA - rollB;
+                      }
+                      return a.rollnumber.localeCompare(b.rollnumber);
+                    })
                     .map((student) => {
                       return (
                         <Card
@@ -132,7 +140,7 @@ function StudentsPage({
                           }
                         >
                           <CardHeader>
-                            <div className="flex space-x-4 items-center">
+                            <div className="flex space-x-4 items-center border">
                               <Avatar className="h-14 w-14 ">
                                 <AvatarImage
                                   src={student.image_url}
@@ -163,6 +171,7 @@ function StudentsPage({
                                     rollnumber: Number(student.rollnumber),
                                   });
                                 }}
+                                className="ml-auto"
                               >
                                 <Edit />
                               </Button>

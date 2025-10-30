@@ -109,42 +109,51 @@ function MarksPage({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {newMarks.map((record, index) => (
-            <TableRow key={record._id}>
-              <TableCell>{record.rollNumber}</TableCell>
-              <TableCell className="font-medium">{record.name}</TableCell>
-              <TableCell>
-                <Input
-                  type="number"
-                  value={record.marks}
-                  onChange={(e) => {
-                    onMarksChange(Number(e.target.value), record._id);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      const inputs =
-                        document.querySelectorAll<HTMLInputElement>(
-                          "input[type='number']"
-                        );
-                      inputs?.[index + 1]?.focus();
-                    }
-                  }}
-                  className="w-16 text-center"
-                  min={0}
-                />
-              </TableCell>
-              <TableCell>
-                <Button
-                  disabled={record.saved === record.marks}
-                  onClick={() => saveMarks(record)}
-                  variant={"link"}
-                >
-                  Save
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {newMarks
+            .sort((a, b) => {
+              const rollA = Number(a.rollNumber);
+              const rollB = Number(b.rollNumber);
+              if (!isNaN(rollA) && !isNaN(rollB)) {
+                return rollA - rollB;
+              }
+              return a.rollNumber.localeCompare(b.rollNumber);
+            })
+            .map((record, index) => (
+              <TableRow key={record._id}>
+                <TableCell>{record.rollNumber}</TableCell>
+                <TableCell className="font-medium">{record.name}</TableCell>
+                <TableCell>
+                  <Input
+                    type="number"
+                    value={record.marks}
+                    onChange={(e) => {
+                      onMarksChange(Number(e.target.value), record._id);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        const inputs =
+                          document.querySelectorAll<HTMLInputElement>(
+                            "input[type='number']"
+                          );
+                        inputs?.[index + 1]?.focus();
+                      }
+                    }}
+                    className="w-16 text-center"
+                    min={0}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    disabled={record.saved === record.marks}
+                    onClick={() => saveMarks(record)}
+                    variant={"link"}
+                  >
+                    Save
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </CardContent>

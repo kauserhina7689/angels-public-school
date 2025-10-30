@@ -44,7 +44,7 @@ export default function DatePicker({
           mode="single"
           selected={date}
           captionLayout="dropdown"
-          fromYear={2025}
+          fromYear={1990}
           toYear={2100}
           disabled={(d) => !futureDateAllowed && d > new Date()}
           onSelect={(date) => {

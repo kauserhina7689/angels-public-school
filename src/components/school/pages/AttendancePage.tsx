@@ -185,29 +185,38 @@ export default function AttendancePage({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredStudents.map((student) => (
-                    <TableRow
-                      onClick={() =>
-                        toggleAttendance({
-                          class_id: student.class_id,
-                          student_id: student._id,
-                        })
+                  {filteredStudents
+                    .sort((a, b) => {
+                      const rollA = Number(a.rollnumber);
+                      const rollB = Number(b.rollnumber);
+                      if (!isNaN(rollA) && !isNaN(rollB)) {
+                        return rollA - rollB;
                       }
-                      className={cn(
-                        "cursor-pointer",
-                        !!absentStudents.find(
-                          (st) => st.student_id == student._id
-                        ) && "bg-destructive/40  hover:bg-destructive/40"
-                      )}
-                      key={student._id}
-                    >
-                      <TableCell className="font-medium">
-                        {student.rollnumber}
-                      </TableCell>
-                      <TableCell>{student.name}</TableCell>
-                      <TableCell>{selectedClass}</TableCell>
-                    </TableRow>
-                  ))}
+                      return a.rollnumber.localeCompare(b.rollnumber);
+                    })
+                    .map((student) => (
+                      <TableRow
+                        onClick={() =>
+                          toggleAttendance({
+                            class_id: student.class_id,
+                            student_id: student._id,
+                          })
+                        }
+                        className={cn(
+                          "cursor-pointer",
+                          !!absentStudents.find(
+                            (st) => st.student_id == student._id
+                          ) && "bg-destructive/40  hover:bg-destructive/40"
+                        )}
+                        key={student._id}
+                      >
+                        <TableCell className="font-medium">
+                          {student.rollnumber}
+                        </TableCell>
+                        <TableCell>{student.name}</TableCell>
+                        <TableCell>{selectedClass}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </>

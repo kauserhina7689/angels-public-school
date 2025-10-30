@@ -9,6 +9,7 @@ interface NavLinkProps {
   children: React.ReactNode;
   classname?: string;
   activeClassname?: string;
+  onClick?: () => void;
 }
 
 export default function NavLink({
@@ -16,12 +17,17 @@ export default function NavLink({
   children,
   classname,
   activeClassname,
+  onClick,
 }: NavLinkProps) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
-    <Link href={href} className={clsx(classname, isActive && activeClassname)}>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={clsx(classname, isActive && activeClassname)}
+    >
       {children}
     </Link>
   );
