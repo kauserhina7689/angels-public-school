@@ -48,17 +48,14 @@ export async function createOrUpdateStudent(
   student: StudentFormData & { oldClassId: string }
 ): Promise<createStudentReturnType> {
   //*init database session
-  const session = await mongoose.startSession();
   try {
     await connectDB();
-    session.startTransaction();
     await StudentModel.init();
 
     if (student._id == "new") return createStudent(student);
     return updateStudent(student);
     // eslint-disable-next-line
   } catch (error: any) {
-    await session.abortTransaction();
     console.log({ studentRegisterErro: error });
     if (error.code === 11000) {
       const errors = Object.entries(error.keyValue)
@@ -76,8 +73,6 @@ export async function createOrUpdateStudent(
       return { success: false, errors, message: "Student validation failed" };
     }
     return { success: false, message: "Some thing went wrong", errors: [] };
-  } finally {
-    session.endSession();
   }
 }
 
