@@ -138,7 +138,7 @@ function AddStudentForm({
       class_id: classes[0]?._id ?? "",
       rollnumber: 0,
       mobileNumber: 0,
-      adhaarNumber: ,
+      adhaarNumber:0 ,
       dob: formatDateLocal(new Date()),
       bloodGroup: "AB−",
       _id: "new",
