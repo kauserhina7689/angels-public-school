@@ -50,8 +50,8 @@ export async function createOrUpdateStudent(
   //*init database session
   const session = await mongoose.startSession();
   try {
-    session.startTransaction();
     await connectDB();
+    session.startTransaction();
     await StudentModel.init();
 
     if (student._id == "new") return createStudent(student);
@@ -88,7 +88,7 @@ async function createStudent({
   ...student
 }: StudentFormData): Promise<createStudentReturnType> {
   try {
-    await connectDB();
+    // await connectDB();
     console.log("creating student ", _id);
     const { public_id, secure_url } = await uploadCloudinary(
       student.file as File
@@ -154,7 +154,7 @@ async function updateStudent({
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    await connectDB();
+    // await connectDB();
     await StudentModel.init();
     const {
       address,
