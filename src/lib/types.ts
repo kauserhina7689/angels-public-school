@@ -1,3 +1,4 @@
+import { assignmentFormType } from "@/components/school/modals/addAssignment";
 import { Types } from "mongoose";
 
 export interface studentType {
@@ -34,18 +35,9 @@ export interface marksType {
   absent: boolean;
 }
 
-export interface asssignmentType {
-  subject: string;
-  title: string;
-  description: string;
-  attachment?: string;
-}
-
-export interface HomeworkType {
+export interface asssignmentType extends assignmentFormType {
   date: Date;
-  batch: number;
-  class_id: Types.ObjectId;
-  assignments: asssignmentType[];
+  session_id: string;
 }
 
 export interface attendanceType {
