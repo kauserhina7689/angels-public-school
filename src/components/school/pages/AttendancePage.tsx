@@ -31,6 +31,12 @@ import { addAttendanceAction } from "@/server/actions/school/attendance";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { FilteredStudentType } from "@/app/school/attendance/page";
+import {
+  differenceInCalendarDays,
+  getDaysInMonth,
+  isSameMonth,
+  startOfMonth,
+} from "date-fns";
 // import { DatePicker } from "@/components/common/DatePicker";
 const DatePicker = dynamic(() => import("@/components/common/DatePicker"), {
   ssr: false,
@@ -40,11 +46,17 @@ export default function AttendancePage({
   studentsByClass,
   attendance,
   date,
+  monthlyAttendance,
 }: {
   studentsByClass: Record<string, FilteredStudentType[]>;
   attendance: {
     class_id: string;
     student_id: string;
+  }[];
+  monthlyAttendance: {
+    class_id: string;
+    student_id: string;
+    date: string;
   }[];
   date?: string;
 }) {
@@ -71,8 +83,6 @@ export default function AttendancePage({
     setAbsentStudents(attendance);
   }, [attendance]);
 
-  const filteredStudents = studentsByClass[selectedClass] || [];
-
   async function UploadAttendance() {
     const id = toast.loading("Saving attendance");
     try {
@@ -83,6 +93,7 @@ export default function AttendancePage({
       );
       if (!status) toast.error(message, { id });
       toast.success(message, { id });
+      router.refresh();
     } catch {
       toast.error("Something went wrong", {
         description: "Please try again..",
@@ -90,6 +101,29 @@ export default function AttendancePage({
       });
     }
   }
+  function getDaysCountForMonth(d?: string) {
+    const today = new Date();
+    const date = d ? new Date(d) : new Date();
+
+    // If date is from the same month as today → days passed
+    if (isSameMonth(date, today)) {
+      return differenceInCalendarDays(today, startOfMonth(today)) + 1;
+      // OR simply: return today.getDate();
+    }
+
+    // If past month → full days of that month
+    return getDaysInMonth(date);
+  }
+  const totalDays = getDaysCountForMonth(date);
+  console.log("total days", totalDays);
+
+  const filteredStudents = (studentsByClass[selectedClass] || []).map((st) => {
+    return {
+      ...st,
+      absentDays: monthlyAttendance.filter((a) => a.student_id == st._id)
+        .length,
+    };
+  });
 
   const toggleAttendance = ({
     student_id,
@@ -181,7 +215,7 @@ export default function AttendancePage({
                   <TableRow>
                     <TableHead>Roll Number</TableHead>
                     <TableHead>Student Name</TableHead>
-                    <TableHead>Class</TableHead>
+                    <TableHead>Attendance</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -214,7 +248,9 @@ export default function AttendancePage({
                           {student.rollnumber}
                         </TableCell>
                         <TableCell>{student.name}</TableCell>
-                        <TableCell>{selectedClass}</TableCell>
+                        <TableCell>
+                          {student.absentDays}/{totalDays}
+                        </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
@@ -229,6 +265,7 @@ export default function AttendancePage({
           </Button>
         </CardFooter>
       </Card>
+      <h3></h3>
     </div>
   );
 }

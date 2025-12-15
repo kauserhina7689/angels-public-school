@@ -9,6 +9,7 @@ import {
   BookOpen,
   NotebookPen,
   ClipboardCheck,
+  Calendar1Icon,
 } from "lucide-react";
 import NavLink from "../common/NavBarLink";
 import { LogoutDialog } from "../common/logoutDialog";
@@ -38,6 +39,11 @@ export const menuItems = [
     title: "Attendance",
     href: "/school/attendance",
     icon: ClipboardCheck,
+  },
+  {
+    title: "Holidays",
+    href: "/school/holidays",
+    icon: Calendar1Icon,
   },
   {
     title: "Marks",

@@ -1,6 +1,9 @@
 import AttendancePage from "@/components/school/pages/AttendancePage";
 import { getSessions } from "@/server/actions/admin/getdata";
-import { getAttendanceByDay } from "@/server/actions/school/attendance";
+import {
+  getAttendanceByDay,
+  getMonthlyAttendance,
+} from "@/server/actions/school/attendance";
 import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 import { redirect } from "next/navigation";
 export interface FilteredStudentType {
@@ -37,10 +40,12 @@ async function AttendancePageServer({
     return acc;
   }, {} as Record<string, FilteredStudentType[]>);
   const { date } = await searchParams;
-  const attendance = (await getAttendanceByDay(date)) || [];
+  const attendance = await getAttendanceByDay(date);
+  const monthlyAttendance = await getMonthlyAttendance(date);
   return (
     <AttendancePage
       attendance={attendance}
+      monthlyAttendance={monthlyAttendance}
       studentsByClass={studentsByClass}
       date={date}
     ></AttendancePage>

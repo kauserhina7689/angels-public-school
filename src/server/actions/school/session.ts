@@ -73,7 +73,7 @@ export async function setCurrentSession(_id: string) {
     if (!session) {
       console.log("session not found");
     } else {
-      console.log("coorect session id: ", _id);
+      console.log("correct session id: ", _id);
     }
     cookieStore.set("session", _id, { maxAge: 1000 * 60 * 60 * 24 * 7 });
     return true;
@@ -85,10 +85,10 @@ export async function setCurrentSession(_id: string) {
 export async function getCurrentSession() {
   try {
     const cookieStore = await cookies();
-    const session = cookieStore.get("session")?.value;
-    console.log({ session });
+    const currentSession = cookieStore.get("session")?.value;
+    console.log({ currentSession });
 
-    return session;
+    return currentSession;
   } catch (error) {
     console.log({ error });
     return undefined;

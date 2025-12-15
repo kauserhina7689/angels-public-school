@@ -22,35 +22,11 @@ export default async function addAssignmentServer(
 
     const { class_id, assignments } = data;
 
-    // Upload each file to Cloudinary and attach URLs
-    const uploadedAssignments = await Promise.all(
-      assignments.map(async (item) => {
-        // If the file already contains URLs, skip upload
-        if (
-          "image_url" in item.file &&
-          item.file.image_url.startsWith("http")
-        ) {
-          return item;
-        }
-
-        const { public_id, secure_url } = await uploadCloudinary(
-          item.file as unknown as File
-        );
-
-        return {
-          ...item,
-          file: {
-            image_url: secure_url,
-            image_public_id: public_id,
-          },
-        };
-      })
-    );
     const session_id = await getCurrentSession();
     const newAssignment = await AssignmentModel.create({
       date: new Date(),
       class_id: new mongoose.Types.ObjectId(class_id),
-      assignments: uploadedAssignments,
+      assignments,
       session_id,
     });
 

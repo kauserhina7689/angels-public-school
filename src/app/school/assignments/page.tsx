@@ -6,8 +6,6 @@ import React from "react";
 async function AssignmentPageServer() {
   const classes = await getClasses();
   const assignments = await getAssignments();
-  console.log({ assignments });
-
   return <AssignmentsPage classes={classes} assignments={assignments} />;
 }
 

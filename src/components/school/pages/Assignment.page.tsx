@@ -15,6 +15,7 @@ import { getClasses } from "@/server/actions/school/getClasses";
 import AddAssignmentForm from "../modals/addAssignment";
 import { getAssignments } from "@/server/actions/school/assignment/getAssignmentsServer";
 import { formatDistanceToNow } from "date-fns";
+import DeleteAssignmentModal from "../modals/deleteAssignmentModal";
 
 interface propsType {
   classes: Awaited<ReturnType<typeof getClasses>>;
@@ -62,12 +63,7 @@ export default function AssignmentsPage({ classes, assignments }: propsType) {
                     })}
                   </CardDescription>
                 </div>
-                <Button
-                  variant="outline"
-                  className="rounded-xl text-red-600 hover:bg-red-50 bg-transparent"
-                >
-                  Delete
-                </Button>
+                <DeleteAssignmentModal _id={group._id} />
               </div>
             </CardHeader>
 

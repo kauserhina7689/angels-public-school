@@ -52,7 +52,14 @@ export interface ClassType {
 
   session: Types.ObjectId;
 }
-
+export interface HolidayType {
+  _id: string;
+  date: Date;
+  title: string;
+  description?: string;
+  session_id: string;
+  duration: number;
+}
 export interface announcementsType {
   title: string;
   description: string;

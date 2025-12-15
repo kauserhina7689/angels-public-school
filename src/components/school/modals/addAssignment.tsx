@@ -59,21 +59,23 @@ const subjectAssignment = z.object({
     .string()
     .min(3, "Enter a proper assignment description")
     .max(500, "Description too long"),
-  file: z.object({
-    image_public_id: z
-      .string({
-        required_error: "Image public ID is required",
-      })
-      .min(1, { message: "Image public ID cannot be empty" }),
+  file: z.union([
+    // Allow empty/default file object
+    z.object({
+      image_public_id: z.string(),
+      image_url: z.string(),
+      name: z.string(),
+      size: z.number(),
+    }),
+    z.object({
+      image_public_id: z.string().min(1, "Image public ID cannot be empty"),
 
-    image_url: z
-      .string({
-        required_error: "Image URL is required",
-      })
-      .url({ message: "Please provide a valid image URL" }),
-    name: z.string().min(1, "File name is rewuired"),
-    size: z.number(),
-  }),
+      image_url: z.string().url("Please provide a valid image URL"),
+
+      name: z.string().min(1, "File name is required"),
+      size: z.number().min(1, "File size must be greater than zero"),
+    }),
+  ]),
   subject: z.string().min(1, "Please select a subject"),
 });
 
@@ -175,7 +177,7 @@ export default function MultiSubjectAssignmentForm({
     const currentFile = form.watch(`assignments.${index}.file`);
     console.log({ currentFile });
 
-    if (currentFile.image_public_id) {
+    if (currentFile?.image_public_id) {
       await deleteFromCloudinary(currentFile.image_public_id);
     }
     const { public_id, secure_url } = await uploadCloudinary(selectedFile);
@@ -209,6 +211,7 @@ export default function MultiSubjectAssignmentForm({
       }
       toast.success(resp.message, { id });
       form.reset();
+      setModalOpen(false);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong", { id });
@@ -418,7 +421,7 @@ export default function MultiSubjectAssignmentForm({
                                         ?.click()
                                     }
                                   >
-                                    {currentFile.image_public_id ? (
+                                    {currentFile?.image_public_id ? (
                                       <div className="w-full p-2 bg-background border rounded-xl flex justify-between items-center">
                                         <p className="text-sm">
                                           {currentFile.name}{" "}

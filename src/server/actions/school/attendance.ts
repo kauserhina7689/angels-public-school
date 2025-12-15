@@ -1,7 +1,7 @@
 "use server";
 import { getISTMiddayDate } from "@/lib/utils";
 import { AttendanceModel } from "@/server/DB/models/attendance";
-
+import { startOfMonth, endOfMonth, parseISO } from "date-fns";
 import { ObjectId, Types } from "mongoose";
 
 interface BulkAttendanceInput {
@@ -98,5 +98,37 @@ export async function getAttendanceByDay(date?: string) {
     }));
   } catch (error) {
     console.log(error);
+    return [];
+  }
+}
+
+export async function getMonthlyAttendance(date?: string) {
+  try {
+    // If date provided → parse it, else use current date
+    const baseDate = date ? parseISO(date) : new Date();
+
+    const start = startOfMonth(baseDate);
+    const end = endOfMonth(baseDate);
+
+    const attendance = await AttendanceModel.find({
+      date: { $gte: start, $lte: end },
+    }).select("student_id class_id date");
+
+    return attendance.map(({ class_id, student_id, date }) => ({
+      class_id: class_id.toString(),
+      student_id: student_id.toString(),
+      date: date.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }),
+    }));
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 }
