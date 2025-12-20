@@ -1,6 +1,6 @@
 "use client";
 import { HolidayType } from "@/lib/types";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import AddHolidayDialog from "../modals/addHolidayDialog";
 import { deleteHoliday } from "@/server/actions/school/holiday/delete";
+import DeleteHolidayModal from "../modals/deleteHolidayModal";
+import { markSundaysForHolidayForCurrentSession } from "@/server/actions/school/holiday/addSundaysForSession";
 
 export default function HolidaysPage({
   holidays,
@@ -20,7 +22,7 @@ export default function HolidaysPage({
   );
   const searchParams = useSearchParams();
   const errMessage = searchParams.get("message");
-
+  const router = useRouter();
   useEffect(() => {
     if (errMessage) toast.error(errMessage);
   }, [errMessage]);
@@ -53,11 +55,10 @@ export default function HolidaysPage({
 
     const id = toast.loading("Deleting holiday...");
     try {
-      // TODO: Replace with your actual delete action
       await deleteHoliday(holidayId);
 
       toast.success("Holiday deleted successfully", { id });
-      // router.refresh();
+      router.refresh();
     } catch (error) {
       toast.error("Failed to delete holiday", { id });
       console.error("Error deleting holiday:", error);
@@ -73,6 +74,9 @@ export default function HolidaysPage({
             View and manage holidays for the current session
           </p>
         </div>
+        <Button onClick={markSundaysForHolidayForCurrentSession}>
+          Mark sundays
+        </Button>
         <AddHolidayDialog
           selectedHoliday={selectedHoliday}
           setSelectedHoliday={setSelectedHoliday}
@@ -116,6 +120,9 @@ export default function HolidaysPage({
                   const dayOfWeek = startDate.toLocaleDateString("en-US", {
                     weekday: "short",
                   });
+                  const endDayName = endDate.toLocaleDateString("en-US", {
+                    weekday: "short",
+                  });
                   console.log(holiday);
 
                   return (
@@ -147,6 +154,14 @@ export default function HolidaysPage({
                               <Badge variant="secondary" className="mt-1">
                                 {dayOfWeek}
                               </Badge>
+                              {isRange && (
+                                <>
+                                  -
+                                  <Badge variant="secondary" className="mt-1">
+                                    {endDayName}
+                                  </Badge>
+                                </>
+                              )}
 
                               {/* Date Range Display */}
                               {isRange && (
@@ -166,16 +181,7 @@ export default function HolidaysPage({
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
-                            <Button
-                              onClick={() =>
-                                handleDelete(holiday._id, holiday.title)
-                              }
-                              variant="ghost"
-                              size="sm"
-                              className="text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                            <DeleteHolidayModal holiday={holiday} />
                           </div>
                         </div>
                       </CardHeader>

@@ -34,9 +34,12 @@ import { FilteredStudentType } from "@/app/school/attendance/page";
 import {
   differenceInCalendarDays,
   getDaysInMonth,
+  isSameDay,
   isSameMonth,
+  parse,
   startOfMonth,
 } from "date-fns";
+import { HolidayType } from "@/lib/types";
 // import { DatePicker } from "@/components/common/DatePicker";
 const DatePicker = dynamic(() => import("@/components/common/DatePicker"), {
   ssr: false,
@@ -47,6 +50,7 @@ export default function AttendancePage({
   attendance,
   date,
   monthlyAttendance,
+  holidays,
 }: {
   studentsByClass: Record<string, FilteredStudentType[]>;
   attendance: {
@@ -59,6 +63,7 @@ export default function AttendancePage({
     date: string;
   }[];
   date?: string;
+  holidays: HolidayType[];
 }) {
   const router = useRouter();
   const [selectedClass, setSelectedClass] = React.useState(
@@ -101,21 +106,53 @@ export default function AttendancePage({
       });
     }
   }
+  const holidaysByMonthYear = React.useMemo(() => {
+    return holidays.reduce((acc, holiday) => {
+      const d =
+        holiday.date instanceof Date ? holiday.date : new Date(holiday.date);
+
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+
+      const key = `${year}-${month}`; // e.g. "2025-01"
+
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(holiday);
+
+      return acc;
+    }, {} as Record<string, HolidayType[]>);
+  }, [holidays]);
+
+  const getHolidaysForMonth = React.useCallback(
+    (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+
+      const key = `${year}-${month}`;
+      return holidaysByMonthYear[key] || [];
+    },
+    [holidaysByMonthYear]
+  );
+
   function getDaysCountForMonth(d?: string) {
     const today = new Date();
     const date = d ? new Date(d) : new Date();
+    const holidays = getHolidaysForMonth(today);
 
     // If date is from the same month as today → days passed
     if (isSameMonth(date, today)) {
-      return differenceInCalendarDays(today, startOfMonth(today)) + 1;
+      return (
+        differenceInCalendarDays(today, startOfMonth(today)) +
+        1 -
+        holidays.length
+      );
       // OR simply: return today.getDate();
     }
 
     // If past month → full days of that month
-    return getDaysInMonth(date);
+    return getDaysInMonth(date) - holidays.length;
   }
   const totalDays = getDaysCountForMonth(date);
-  console.log("total days", totalDays);
 
   const filteredStudents = (studentsByClass[selectedClass] || []).map((st) => {
     return {
@@ -161,7 +198,9 @@ export default function AttendancePage({
       });
     }
   };
-
+  const isHoliday = holidays.some((h) => {
+    return isSameDay(h.date, date ? new Date(date) : new Date());
+  });
   return (
     <div className="sm:p-6 space-y-6 h-full overflow-y-auto">
       <div>
@@ -204,6 +243,7 @@ export default function AttendancePage({
                 const formattedDate = formatDateLocal(e!);
                 router.replace(`/school/attendance?date=${formattedDate}`);
               }}
+              notAllowedDates={holidays.map((h) => h.date)}
             />
           </div>
         </CardHeader>
@@ -260,7 +300,11 @@ export default function AttendancePage({
         </CardContent>
         <CardFooter>
           {" "}
-          <Button onClick={UploadAttendance} className="cursor-pointer w-full">
+          <Button
+            disabled={isHoliday}
+            onClick={UploadAttendance}
+            className="cursor-pointer w-full"
+          >
             Save Attendance
           </Button>
         </CardFooter>

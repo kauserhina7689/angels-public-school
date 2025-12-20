@@ -5,6 +5,7 @@ import {
   getMonthlyAttendance,
 } from "@/server/actions/school/attendance";
 import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+import { getHolidays } from "@/server/actions/school/holiday/get";
 import { redirect } from "next/navigation";
 export interface FilteredStudentType {
   _id: string;
@@ -42,12 +43,16 @@ async function AttendancePageServer({
   const { date } = await searchParams;
   const attendance = await getAttendanceByDay(date);
   const monthlyAttendance = await getMonthlyAttendance(date);
+  const holidays = await getHolidays()
+
+  
   return (
     <AttendancePage
       attendance={attendance}
       monthlyAttendance={monthlyAttendance}
       studentsByClass={studentsByClass}
       date={date}
+      holidays={holidays.data||[]}
     ></AttendancePage>
   );
 }

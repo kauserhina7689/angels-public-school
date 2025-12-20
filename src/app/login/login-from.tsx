@@ -129,8 +129,8 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-svh bg-gradient-to-br from-indigo-200 via-white to-purple-200 p-4">
-      <div className="w-full flex flex-col md:flex-row items-center">
+    <div className="min-h-svh h-svh bg-gradient-to-br from-indigo-200 via-white to-purple-200 p-4">
+      <div className="w-full h-full border flex flex-col md:flex-row items-center">
         {/* Header */}
         <div className="text-center mb-4 md:w-1/2">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl mb-4 shadow-lg">

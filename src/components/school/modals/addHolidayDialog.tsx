@@ -62,7 +62,7 @@ export default function AddHolidayDialog({
       date: "",
       title: "",
       description: "",
-      duration: 1, // ✅ ADDED
+      duration: 1,
     },
   });
 

@@ -20,8 +20,6 @@ interface ActionResponse<T = void> {
 export async function getHolidays(): Promise<ActionResponse<HolidayType[]>> {
   try {
     await connectDB();
-
-    // Get current session - adjust this to match your session logic
     const session = await getCurrentSession();
     if (!session) {
       return {
@@ -34,11 +32,9 @@ export async function getHolidays(): Promise<ActionResponse<HolidayType[]>> {
     const holidays = await HolidayModel.find({
       session_id: session,
     })
-      .sort({ date: 1 }) // Sort by date ascending
+      .sort({ date: 1 })
       .lean()
       .exec();
-
-    // Convert MongoDB _id and dates to plain objects
     const formattedHolidays = holidays.map((holiday) => ({
       _id: (holiday._id as Types.ObjectId).toString(),
       date: new Date(holiday.date),
@@ -47,7 +43,6 @@ export async function getHolidays(): Promise<ActionResponse<HolidayType[]>> {
       session_id: holiday.session_id.toString(),
       duration: holiday.duration,
     }));
-    console.log(formattedHolidays);
 
     return {
       success: true,

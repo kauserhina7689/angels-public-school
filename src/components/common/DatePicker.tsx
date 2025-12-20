@@ -9,16 +9,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { isSameDay } from "date-fns";
 export default function DatePicker({
   onChange,
   value,
   className,
   futureDateAllowed = false,
+  notAllowedDates,
 }: {
   onChange?: (date?: Date) => void;
   value?: string;
   className?: string;
   futureDateAllowed?: boolean;
+  notAllowedDates?: Date[];
 }) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(
@@ -41,12 +44,20 @@ export default function DatePicker({
       </PopoverTrigger>
       <PopoverContent className="w-auto overflow-hidden p-0" align="start">
         <Calendar
+          className="z-[99999]"
           mode="single"
           selected={date}
           captionLayout="dropdown"
           fromYear={1990}
           toYear={2100}
-          disabled={(d) => !futureDateAllowed && d > new Date()}
+          disabled={(d) => {
+            const isFutureBlocked = !futureDateAllowed && d > new Date();
+
+            const isNotAllowed =
+              notAllowedDates?.some((nd) => isSameDay(nd, d)) ?? false;
+
+            return isFutureBlocked || isNotAllowed;
+          }}
           onSelect={(date) => {
             setDate(date);
             setOpen(false);

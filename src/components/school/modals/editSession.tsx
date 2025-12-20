@@ -1,7 +1,5 @@
 "use client";
-const DatePicker = dynamic(() => import("@/components/common/DatePicker"), {
-  ssr: false,
-});
+
 import {
   Form,
   FormControl,
@@ -33,6 +31,7 @@ import {
   setCurrentSession as setCurrentSessionServer,
 } from "@/server/actions/school/session";
 import { useRouter } from "next/navigation";
+import DatePicker from "@/components/common/DatePicker";
 
 export const sessionSchema = z
   .object({
