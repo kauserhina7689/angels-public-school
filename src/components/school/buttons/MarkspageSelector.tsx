@@ -5,7 +5,9 @@ import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -82,11 +84,14 @@ function MarkspageSelector({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {classes.map((cls) => (
-                <SelectItem key={cls._id} value={cls._id}>
-                  {cls.class_name}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                <SelectLabel>Classes</SelectLabel>
+                {classes.map((cls) => (
+                  <SelectItem key={cls._id} value={cls._id}>
+                    {cls.class_name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
           <Select value={selectedSubject} onValueChange={setSelectedSubject}>
@@ -94,11 +99,14 @@ function MarkspageSelector({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {subjects.map((sub) => (
-                <SelectItem key={sub._id} value={sub._id}>
-                  {sub.name}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                <SelectLabel>Subjects</SelectLabel>
+                {subjects.map((sub) => (
+                  <SelectItem key={sub._id} value={sub._id}>
+                    {sub.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
           <Select value={selectedExam} onValueChange={setSelectedExam}>
@@ -106,11 +114,14 @@ function MarkspageSelector({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(examTypes).map(([exam, examString]) => (
-                <SelectItem key={exam} value={exam}>
-                  {examString}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                <SelectLabel>Examination</SelectLabel>
+                {Object.entries(examTypes).map(([exam, examString]) => (
+                  <SelectItem key={exam} value={exam}>
+                    {examString}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
