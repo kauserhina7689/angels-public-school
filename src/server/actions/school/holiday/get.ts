@@ -4,7 +4,6 @@ import { connectDB } from "@/server/DB";
 import { Types } from "mongoose";
 import { getCurrentSession } from "../session";
 import { HolidayModel } from "@/server/DB/models/holiday";
-import { HolidayFormData } from "@/components/school/modals/addHolidayDialog";
 import { HolidayType } from "@/lib/types";
 
 interface ActionResponse<T = void> {

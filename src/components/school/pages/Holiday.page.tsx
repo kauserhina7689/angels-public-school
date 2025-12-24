@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Edit, Trash2 } from "lucide-react";
+import { Calendar, Edit } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import AddHolidayDialog from "../modals/addHolidayDialog";
@@ -48,7 +48,7 @@ export default function HolidaysPage({
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
   });
-
+  // eslint-disable-next-line
   const handleDelete = async (holidayId: string, title: string) => {
     const confirmed = confirm(`Are you sure you want to delete "${title}"?`);
     if (!confirmed) return;

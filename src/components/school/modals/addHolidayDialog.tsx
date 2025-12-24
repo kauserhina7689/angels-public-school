@@ -79,7 +79,7 @@ export default function AddHolidayDialog({
       if (!resp.success) {
         toast.error(resp.message, { id });
         console.log(resp.errors);
-
+        // eslint-disable-next-line
         resp.errors.forEach((err: any) =>
           form.setError(err.field as keyof HolidayFormData, {
             message: err.message,

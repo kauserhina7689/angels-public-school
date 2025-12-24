@@ -36,7 +36,6 @@ import {
   getDaysInMonth,
   isSameDay,
   isSameMonth,
-  parse,
   startOfMonth,
 } from "date-fns";
 import { HolidayType } from "@/lib/types";

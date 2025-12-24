@@ -134,6 +134,7 @@ export async function createHoliday(
         duration: newHoliday.duration,
       },
     };
+    // eslint-disable-next-line
   } catch (error: any) {
     console.error("Error creating/updating holiday:", error);
 

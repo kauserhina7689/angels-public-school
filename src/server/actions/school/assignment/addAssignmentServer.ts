@@ -1,7 +1,6 @@
 "use server";
 
 import { assignmentFormType } from "@/components/school/modals/addAssignment";
-import { uploadCloudinary } from "@/lib/cloudinary";
 import { connectDB } from "@/server/DB";
 import { AssignmentModel } from "@/server/DB/models/assignment";
 import mongoose from "mongoose";

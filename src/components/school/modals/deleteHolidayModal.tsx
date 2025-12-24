@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 function DeleteHolidayModal({ holiday }: { holiday: HolidayType }) {
   const router = useRouter();
-  const handleDelete = async (holidayId: string, title: string) => {
+  const handleDelete = async (holidayId: string) => {
     const id = toast.loading("Deleting holiday...");
     try {
       await deleteHoliday(holidayId);
@@ -53,9 +53,7 @@ function DeleteHolidayModal({ holiday }: { holiday: HolidayType }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => handleDelete(holiday._id, holiday.title)}
-          >
+          <AlertDialogAction onClick={() => handleDelete(holiday._id)}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -6,7 +6,7 @@ import { Session } from "@/server/DB/models/session";
 function getAllSundays(startDate: Date, endDate: Date): HolidayFormData[] {
   const result: HolidayFormData[] = [];
 
-  let current = new Date(startDate);
+  const current = new Date(startDate);
   current.setHours(0, 0, 0, 0);
 
   const end = new Date(endDate);

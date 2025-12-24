@@ -228,9 +228,7 @@ async function updateStudent({
           errors: [],
           message: "New class does not exist",
         };
-      newClass.students.push(
-        new mongoose.Types.ObjectId(oldStudent._id as string)
-      );
+      newClass.students.push(new mongoose.Types.ObjectId(oldStudent._id));
       newClass.save({ session });
       await oldStudent.save({ session });
       await session.commitTransaction();

@@ -24,6 +24,7 @@ export async function deleteAssignmentServer(_id: string) {
       status: true,
       message: "Assignment deleted successfully.",
     };
+    // eslint-disable-next-line
   } catch (error: any) {
     console.error("Delete Assignment Error:", error);
 
