@@ -193,7 +193,7 @@ function InfoItem({ icon, label, value, fullWidth = false }: InfoItemProps) {
         <div className="mt-1 text-gray-500">{icon}</div>
         <div className="flex-1">
           <p className="text-sm text-gray-600 mb-1">{label}</p>
-          <p className="text-base font-semibold text-gray-800 break-words">
+          <p className="text-base font-semibold text-gray-800 wrap-break-word">
             {value}
           </p>
         </div>

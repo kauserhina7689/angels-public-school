@@ -40,6 +40,12 @@ export const examTypes = {
   halfYearlyExam: "Half-Yearly Exam",
   annualFinal: "Annual Exam",
 } as const;
+export const examMaxMarks: Record<string, number> = {
+  unitTest1: 30,
+  unitTest2: 30,
+  halfYearlyExam: 70,
+  annualFinal: 70,
+};
 export const formatDateFrontend = (date: string | Date): string => {
   const dateObject = typeof date === "string" ? new Date(date) : date;
 

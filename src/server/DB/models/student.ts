@@ -64,4 +64,4 @@ StudentSchema.index(
   { unique: true }
 );
 export const StudentModel: Model<StudentDocument> =
-  models.Student || model<StudentDocument>("Student", StudentSchema);
+  models?.Student || model<StudentDocument>("Student", StudentSchema);

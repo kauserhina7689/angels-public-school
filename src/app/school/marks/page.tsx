@@ -34,7 +34,6 @@ export default async function MarksPageServer({
   const currentSubject = mongoose.Types.ObjectId.isValid(params.subject)
     ? params.subject
     : "";
-  console.log(classes.length);
 
   if (classes.length == 0) redirect("/school/classes");
   return (

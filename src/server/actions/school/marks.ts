@@ -1,5 +1,6 @@
 "use server";
 
+import { examMaxMarks } from "@/lib/utils";
 import { ClassModel } from "@/server/DB/models/Class";
 import { MarksDocument, MarksModel } from "@/server/DB/models/marks";
 import { StudentDocument } from "@/server/DB/models/student";
@@ -47,7 +48,8 @@ export async function getMarks({
       };
     }
 
-    let max = 0;
+    let max = examMaxMarks[exam];
+    // await MarksModel.deleteMany();
     const marks = await Promise.all(
       students.map(async (student) => {
         const existingMarks: MarksDocument | null = await MarksModel.findOne({

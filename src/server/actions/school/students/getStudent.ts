@@ -48,3 +48,72 @@ export async function getStudentWithId(id: string) {
     };
   }
 }
+
+// export async function getPopulatedClasses() {
+//   try {
+//     await connectDB();
+
+//     const session = (await getCurrentSession())!;
+//     const classes = await ClassModel.find({ session }).select(
+//       "id session class_name"
+//     );
+//     const populatedClasses = await Promise.all(
+//       classes.map(async (c) => {
+//         const studentsClassRealtion = await ClassStudentRelation.find({
+//           class_id: c._id,
+//         })
+//           .select("-__v -createdAt -updatedAt")
+//           .populate(
+//             "student_id",
+//             "_id name fatherName motherName address mobileNumber adhaarNumber serialNumber rollnumber bloodGroup dob image_url image_public_id"
+//           );
+//         console.table(studentsClassRealtion[0].rollnumber);
+//         const students = studentsClassRealtion.map(
+//           (r: classStudentRelation) => {
+//             const {
+//               _id: stId,
+//               name,
+//               fatherName,
+//               motherName,
+//               address,
+//               mobileNumber,
+//               adhaarNumber,
+//               serialNumber,
+//               bloodGroup,
+//               dob,
+//               image_url,
+//               image_public_id,
+//             } = r.student_id as unknown as StudentDocument;
+//             return {
+//               _id: (stId as mongoose.Types.ObjectId).toString(),
+//               name,
+//               fatherName,
+//               motherName,
+//               address,
+//               mobileNumber,
+//               adhaarNumber,
+//               serialNumber,
+//               rollnumber: r.rollnumber,
+//               bloodGroup,
+//               dob,
+//               image_url,
+//               image_public_id,
+//             };
+//           }
+//         );
+//         console.log(students);
+
+//         return {
+//           session,
+//           class_name: c.class_name,
+//           _id: c._id.toString(),
+//           students,
+//         };
+//       })
+//     );
+//     console.log({ populatedClasses });
+//     return populatedClasses;
+//   } catch (error) {
+//     return [];
+//   }
+// }

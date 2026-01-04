@@ -13,10 +13,26 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import AddStudentForm from "@/components/school/modals/addStudentForm";
 import "@/server/DB/models/Class";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 import { studentType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { getStudentResult } from "@/server/actions/school/result/getStudentResult";
+// import { addClassV } from "@/server/actions/dev/addClassV";
+// import { Dialog } from "@radix-ui/react-dialog";
+// import {
+//   DialogClose,
+//   DialogContent,
+//   DialogDescription,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+// import { Label } from "@/components/ui/label";
+// import AddCLassV from "@/server/actions/dev/addCLassV";
+import { migrateStudentModel } from "@/server/actions/dev/migrateStudents";
+import { toast } from "sonner";
+import { getPopulatedClasses } from "@/server/actions/school/getClasses";
 
 function StudentsPage({
   classes: populatedClasses,
@@ -24,7 +40,7 @@ function StudentsPage({
   classes: Awaited<ReturnType<typeof getPopulatedClasses>>;
 }) {
   const [query, setQuery] = useState("");
-  const router = useRouter();
+  // const router = useRouter();
   const [currentStudent, setCurrentStudent] = useState<
     (studentType & { class_id: string; _id: string }) | null
   >(null);
@@ -66,6 +82,15 @@ function StudentsPage({
           )}
         </form>
         <div className="flex items-center gap-4 grow  md:justify-end">
+          {/* <AddCLassV /> */}
+          <Button
+            onClick={async () => {
+              toast("Migrating students");
+              migrateStudentModel().then(toast);
+            }}
+          >
+            Migrate students
+          </Button>
           <AddStudentForm
             currentStudent={currentStudent}
             setCurrentStudent={setCurrentStudent}
@@ -88,9 +113,7 @@ function StudentsPage({
               {students!.filter(
                 (student) =>
                   student.name.toLowerCase().includes(query.toLowerCase()) ||
-                  student.rollnumber
-                    .toLowerCase()
-                    .includes(query.toLowerCase()) ||
+                  Number(student.rollnumber) === Number(query) ||
                   student.fatherName
                     .toLowerCase()
                     .includes(query.toLowerCase()) ||
@@ -114,9 +137,7 @@ function StudentsPage({
                         student.name
                           .toLowerCase()
                           .includes(query.toLowerCase()) ||
-                        student.rollnumber
-                          .toLowerCase()
-                          .includes(query.toLowerCase()) ||
+                        Number(student.rollnumber) === Number(query) ||
                         student.fatherName
                           .toLowerCase()
                           .includes(query.toLowerCase()) ||
@@ -125,19 +146,20 @@ function StudentsPage({
                     .sort((a, b) => {
                       const rollA = Number(a.rollnumber);
                       const rollB = Number(b.rollnumber);
-                      if (!isNaN(rollA) && !isNaN(rollB)) {
-                        return rollA - rollB;
-                      }
-                      return a.rollnumber.localeCompare(b.rollnumber);
+                      return rollA - rollB;
                     })
                     .map((student) => {
                       return (
                         <Card
                           key={student._id}
                           className="rounded-xl shadow-sm hover:shadow-md transition"
-                          onClick={() =>
-                            router.push(`/school/students/${student._id}`)
-                          }
+                          onClick={() => {
+                            getStudentResult({
+                              classId: _id,
+                              studentId: student._id,
+                            });
+                            // router.push(`/school/students/${student._id}`);
+                          }}
                         >
                           <CardHeader>
                             <div className="flex space-x-4 items-center">

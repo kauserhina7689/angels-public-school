@@ -12,6 +12,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // migrateStudentModel();
   return (
     <html lang="en">
       <body className="bg-background w-screen h-svh ">

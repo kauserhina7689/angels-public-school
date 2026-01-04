@@ -1,7 +1,7 @@
 "use server";
 
 import mongoose from "mongoose";
-import { ClassModel } from "../DB/models/Class";
+import { ClassModel } from "../../DB/models/Class";
 
 export interface studentType {
   name: string;

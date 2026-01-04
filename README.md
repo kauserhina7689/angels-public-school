@@ -1,5 +1,7 @@
 # 📚 School Management Dashboard
 
+// eslint-disable-next-line
+
 A scalable School Management System built with Next.js that enables admins to manage students, classes, attendance, and subjects seamlessly. This dashboard also supports profile picture uploads using Cloudinary and provides a clean, responsive UI for efficient school data management.
 
 ##🚀 Features
