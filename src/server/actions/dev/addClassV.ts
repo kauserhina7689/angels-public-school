@@ -1,46 +1,57 @@
-// "use server";
-// // import { ClassModel } from "@/server/DB/models/Class";
-// import students from "./class5.json";
-// // import { connectDB } from "@/server/DB";
-// // import { uploadCloudinary } from "@/lib/cloudinary";
-// // import { getCurrentSession } from "../school/session";
-// // import { hashPassword } from "@/server/utils/password";
-// // import { StudentModel } from "@/server/DB/models/student";
-// // import mongoose from "mongoose";
+"use server";
+import { studentType } from "@/lib/types";
+import { createOrUpdateStudent } from "../school/students/createStudent";
+// import { ClassModel } from "@/server/DB/models/Class";
+import students from "./class5new.json";
+// import { connectDB } from "@/server/DB";
+// import { uploadCloudinary } from "@/lib/cloudinary";
+// import { getCurrentSession } from "../school/session";
+// import { hashPassword } from "@/server/utils/password";
+// import { StudentModel } from "@/server/DB/models/student";
+// import mongoose from "mongoose";
 
-// // const studentUniqueErrormap: Record<string, string> = {
-// //   adhaarNumber: "aadhaar number",
-// //   serialNumber: "serial number",
-// //   "classes.rollnumber": "roll number",
-// //   "classes.class_id": "class",
-// // };
-// export function parseDob(dob: string) {
-//   const [day, month, year] = dob.split("/");
-//   return new Date(`${year}-${month}-${day}`); // ISO format
-// }
-// interface Student {
-//   rollNO: number;
-//   serialNumber: number;
-//   name: string;
-//   adhaarNumber: string;
-//   dob: string; // e.g., "06/05/2012"
-//   fName: string;
-//   mName: string;
-//   Address: string;
-//   mobno: number;
-//   bg: string; // e.g., "B+"
-// }
-// export async function addClassV(img: File) {
-//   //   const classes = await ClassModel.find().select("id class_name");
-//   //   console.log({ classes });
-//   console.log("wroking", { classVId: "6958a15ff461e63c1446c19b" }, students[0]);
-//   try {
-//     const res = await Promise.all(
-//       students.map((s) => createStudent(s as Student, img))
-//     );
-//     console.log(res);
-//   } catch  {}
-// }
+// const studentUniqueErrormap: Record<string, string> = {
+//   adhaarNumber: "aadhaar number",
+//   serialNumber: "serial number",
+//   "classes.rollnumber": "roll number",
+//   "classes.class_id": "class",
+// };
+export async function parseDob(dob: string) {
+  const [day, month, year] = dob.split("/");
+  return `${year}-${month}-${day}`; // ISO format
+}
+
+export async function addClassV(img: File) {
+  //   const classes = await ClassModel.find().select("id class_name");
+  //   console.log({ classes });
+  try {
+    const list = await Promise.all(
+      students.map(async (s) => {
+        const dob = await parseDob(s.dob);
+        return {
+          ...s,
+          file: img,
+          dob,
+          _id: "new",
+          adhaarNumber: Number(s.adhaarNumber),
+          bloodGroup: s.bloodGroup as studentType["bloodGroup"],
+          oldClassId: s.class_id,
+          serialNumber: Number(s.serialNumber),
+        };
+      })
+    );
+    const newStudents = await Promise.all(list.map(createOrUpdateStudent));
+    console.log(`Added ${newStudents.length} successfully to class V`);
+    console.log({ newStudents });
+
+    // const res = await Promise.all(
+    //   students.map((s) => createStudent(s as Student, img))
+    // );
+    console.log({ list });
+  } catch (e) {
+    console.log(e);
+  }
+}
 // async function createStudent(student: Student, img: File) {
 //   // try {
 //   //   await connectDB();

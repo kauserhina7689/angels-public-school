@@ -152,4 +152,23 @@
   h6 {
     @apply text-base md:text-lg leading-normal;
   }
+  @media print {
+    body *,
+    .printButton {
+      visibility: hidden;
+    }
+
+    #printArea,
+    #printArea * {
+      visibility: visible;
+    }
+
+    #printArea {
+      position: absolute;
+      inset: 0;
+    }
+    #printArea .printButton {
+      visibility: hidden;
+    }
+  }
 }

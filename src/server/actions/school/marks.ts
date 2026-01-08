@@ -50,6 +50,8 @@ export async function getMarks({
 
     let max = examMaxMarks[exam];
     // await MarksModel.deleteMany();
+    await MarksModel.syncIndexes();
+
     const marks = await Promise.all(
       students.map(async (student) => {
         const existingMarks: MarksDocument | null = await MarksModel.findOne({

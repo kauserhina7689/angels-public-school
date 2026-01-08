@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User2 } from "lucide-react";
-// import { addClassV } from "./addClassV";
+import { addClassV } from "./addClassV";
 import { toast } from "sonner";
 
 function AddCLassV() {
@@ -32,11 +32,14 @@ function AddCLassV() {
   };
   async function add() {
     try {
-      if (!img) return;
+      if (!img) {
+        toast("PLease add a image");
+        return;
+      }
       toast("Adding class V");
 
-      // const resp = await addClassV(img);
-      // console.log(resp);
+      const resp = await addClassV(img);
+      console.log(resp);
       toast("Added");
     } catch (error) {
       console.log(error);

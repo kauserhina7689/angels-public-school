@@ -25,14 +25,16 @@ export async function migrateStudentModel() {
     for (const s of students) {
       if (!Array.isArray(s.classes)) continue;
 
-      await ClassStudentRelation.create(
-        s.classes.map((c) => ({
-          student_id: s._id,
-          class_id: c.class_id,
-          session_id: c.session_id,
-          rollnumber: c.rollnumber,
-        })),
-        { session }
+      console.log(
+        await ClassStudentRelation.create(
+          s.classes.map((c) => ({
+            student_id: s._id,
+            class_id: c.class_id,
+            session_id: c.session_id,
+            rollnumber: c.rollnumber,
+          })),
+          { session }
+        )
       );
     }
     await session.commitTransaction();

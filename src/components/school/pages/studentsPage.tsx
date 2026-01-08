@@ -15,24 +15,10 @@ import "@/server/DB/models/Class";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { studentType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-// import { useRouter } from "next/navigation";
 import { getStudentResult } from "@/server/actions/school/result/getStudentResult";
-// import { addClassV } from "@/server/actions/dev/addClassV";
-// import { Dialog } from "@radix-ui/react-dialog";
-// import {
-//   DialogClose,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
-// import { Label } from "@/components/ui/label";
-// import AddCLassV from "@/server/actions/dev/addCLassV";
 import { migrateStudentModel } from "@/server/actions/dev/migrateStudents";
 import { toast } from "sonner";
-import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+import { getPopulatedClasses } from "@/server/actions/school/students/getStudent";
 
 function StudentsPage({
   classes: populatedClasses,
@@ -40,7 +26,6 @@ function StudentsPage({
   classes: Awaited<ReturnType<typeof getPopulatedClasses>>;
 }) {
   const [query, setQuery] = useState("");
-  // const router = useRouter();
   const [currentStudent, setCurrentStudent] = useState<
     (studentType & { class_id: string; _id: string }) | null
   >(null);
@@ -81,8 +66,7 @@ function StudentsPage({
             </button>
           )}
         </form>
-        <div className="flex items-center gap-4 grow  md:justify-end">
-          {/* <AddCLassV /> */}
+        <div className="flex flex-col md:flex-row items-center gap-4 grow  md:justify-end">
           <Button
             onClick={async () => {
               toast("Migrating students");

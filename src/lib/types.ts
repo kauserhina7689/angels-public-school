@@ -10,16 +10,7 @@ export interface studentType {
   adhaarNumber: number;
   serialNumber: number;
   rollnumber: number;
-  bloodGroup:
-    | "A+"
-    | "A−"
-    | "B+"
-    | "B−"
-    | "AB+"
-    | "AB−"
-    | "O+"
-    | "O−"
-    | undefined;
+  bloodGroup: "A+" | "A−" | "B+" | "B−" | "AB+" | "AB−" | "O+" | "O−";
   dob: Date;
   image_url: string;
   image_public_id: string;
@@ -95,4 +86,26 @@ export class CustomError extends Error {
     this.redirectLabel = options?.redirectLabel;
     this.statusCode = options?.statusCode;
   }
+}
+
+export interface studentResultType {
+  name: string;
+  motherName: string;
+  fatherName: string;
+  serialNumber: number;
+  _id: string;
+  class_name: string;
+  subjectMarks: Record<
+    string,
+    {
+      subject_name: string;
+      exam: Record<
+        string,
+        {
+          max: number;
+          obtained: number;
+        }
+      >;
+    }
+  >;
 }

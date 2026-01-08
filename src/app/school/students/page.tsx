@@ -1,6 +1,8 @@
 import StudentsPage from "@/components/school/pages/studentsPage";
 import { getSessions } from "@/server/actions/admin/getdata";
-import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+import { getPopulatedClasses } from "@/server/actions/school/students/getStudent";
+// import { getPopulatedClasses } from "@/server/actions/school/getClasses";
+
 import { redirect } from "next/navigation";
 
 export default async function StudentsPageServer() {

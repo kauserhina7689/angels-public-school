@@ -44,9 +44,8 @@ const MarksSchema = new Schema<MarksDocument>({
   },
 });
 
-// ✅ Compound index for optimized queries & uniqueness constraint
 MarksSchema.index(
-  { examType: 1, student_id: 1, class_id: 1 },
+  { examType: 1, student_id: 1, class_id: 1, subject_id: 1 },
   { unique: true }
 );
 
