@@ -227,7 +227,6 @@ function AddStudentForm({
 
   return (
     <>
-      {" "}
       <Dialog
         open={isAddModalOpen}
         onOpenChange={(state) => {
@@ -246,7 +245,7 @@ function AddStudentForm({
               dob: formatDateLocal(new Date()),
               bloodGroup: "AB−",
               _id: "new",
-              file: null as unknown as File, //how to do this properly
+              file: null as unknown as File,
             });
             setPreview(null);
             setCurrentStudent(null);
