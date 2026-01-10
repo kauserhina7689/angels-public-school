@@ -146,12 +146,12 @@ export async function saveAllMarks(
     obtained: number;
     absent: boolean;
   }[]
-) {
+) {  await connectDB();
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    await connectDB();
+  
     // Perform updates inside the transaction
     for (const m of marks) {
       const updated = await MarksModel.findByIdAndUpdate(
