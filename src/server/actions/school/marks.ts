@@ -1,6 +1,7 @@
 "use server";
 
 import { examMaxMarks } from "@/lib/utils";
+import { connectDB } from "@/server/DB";
 import { ClassModel } from "@/server/DB/models/Class";
 import { MarksDocument, MarksModel } from "@/server/DB/models/marks";
 import { StudentDocument } from "@/server/DB/models/student";
@@ -16,6 +17,7 @@ export async function getMarks({
   exam: string;
 }) {
   try {
+    await connectDB();
     const classCurrent = await ClassModel.findById(classname).populate(
       "students",
       "name classes"
@@ -123,6 +125,8 @@ export async function saveOneMark(
   { obtained, absent }: { obtained: number; absent: boolean }
 ) {
   try {
+    await connectDB();
+
     const updated = await MarksModel.findByIdAndUpdate(
       markId,
       { obtained, absent },
@@ -147,6 +151,7 @@ export async function saveAllMarks(
   session.startTransaction();
 
   try {
+    await connectDB();
     // Perform updates inside the transaction
     for (const m of marks) {
       const updated = await MarksModel.findByIdAndUpdate(
