@@ -48,10 +48,10 @@ export async function createOrUpdateStudent(
   student: StudentFormData & { oldClassId: string }
 ): Promise<createStudentReturnType> {
   //*init database session
+  await connectDB();
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    await connectDB();
     await StudentModel.init();
 
     if (student._id == "new") return createStudent(student);
