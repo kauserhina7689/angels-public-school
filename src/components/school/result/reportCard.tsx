@@ -148,7 +148,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
   };
 
   return (
-    <div className="w-[210mm] outline-4 relative font-sans min-h-[297mm] mx-auto bg-white border border-black p-6 text-[12px] leading-tight break-after-page print:border-none ">
+    <div className="w-[210mm] outline-4 relative z-10 font-sans min-h-[297mm] mx-auto bg-white border border-black p-6 text-[12px] leading-tight break-after-page print:border-none ">
       {/* ================= SCHOOL HEADER TABLE ================= */}
       <table className="w-full border-collapse  border-8 border-red-700 border-b-0  z-10">
         <tbody>
@@ -643,7 +643,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
         </tbody>
       </table>
 
-      <div className="inset-0 absolute flex items-center justify-center ">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <div className="relative w-125 aspect-square opacity-10">
           <Image
             className="object-contain"
