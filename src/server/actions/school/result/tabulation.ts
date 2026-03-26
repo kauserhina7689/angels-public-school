@@ -22,7 +22,7 @@ export async function getTabulationByClassId(class_id: string): Promise<
 > {
   try {
     console.log({ class_id }, "Getting tabulation");
-
+    // /asdasdsa
     await connectDB();
 
     const currentClass = await ClassModel.findById(class_id);
