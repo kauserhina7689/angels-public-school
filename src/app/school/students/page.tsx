@@ -13,7 +13,9 @@ export default async function StudentsPageServer() {
   const classes = await getPopulatedClasses();
   if (classes.length == 0)
     redirect(
-      "/school/classes?message=Please add classes to the current session"
+      "/school/classes?message=Please add classes to the current session",
     );
+  console.log(classes.map((s) => `${s.class_name}:${s.students.length}`));
+
   return <StudentsPage classes={classes} />;
 }

@@ -176,7 +176,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
                 MOHL. PREM NAGAR JALALABAD, DIST. BIJNOR, UTTAR PRADESH
               </p>
               <p className="text-xs text-gray-500">
-                +91-522-1234567 | +91-522-1234567
+                +91-8273806070 | +91-8445533338
               </p>
             </td>
 
@@ -632,7 +632,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
             <td className="border border-black p-3 text-center w-1/3 border-t-0">
               <div className="border-t border-black pt-1 mt-4 w-32 mx-auto"></div>
               <p className="text-xs font-semibold mt-1">PRINCIPAL</p>
-              <p className="text-[10px] text-gray-500">(MRS. HEENA KAUSER)</p>
+              <p className="text-[10px] text-gray-500">(MRS. HINA KAUSER)</p>
             </td>
           </tr>
         </tbody>
