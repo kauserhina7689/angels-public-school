@@ -40,9 +40,11 @@ export default async function Page({
 
       {/* REPORT CARDS */}
       <div id="printArea" className="space-y-8">
-        {resp.data.map((student) => (
-          <StudentReportCard key={student._id} student={student} />
-        ))}
+        {resp.data
+          .sort((a, b) => Number(a.rollnumber) - Number(b.rollnumber))
+          .map((student) => (
+            <StudentReportCard key={student._id} student={student} />
+          ))}
       </div>
     </div>
   );
