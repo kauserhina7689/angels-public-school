@@ -6,11 +6,13 @@ import ReportSelector from "@/components/school/result/resultSelector";
 import StudentReportCard from "@/components/school/result/reportCard";
 
 // helper to calculate percentage
+// eslint-disable-next-line
 function calculatePercentage(student: any) {
   let obtained = 0;
   let max = 0;
-
+  // eslint-disable-next-line
   Object.values(student.subjectMarks).forEach((subject: any) => {
+    // eslint-disable-next-line
     Object.values(subject.exam).forEach((exam: any) => {
       obtained += exam.obtained;
       max += exam.max;
