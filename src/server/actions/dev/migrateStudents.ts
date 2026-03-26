@@ -31,6 +31,7 @@ export async function migrateStudentModel() {
             ordered: false, // skip duplicates instead of failing
           },
         );
+        // eslint-disable-next-line
       } catch (err: any) {
         console.log("failed for student ", { s }, err);
 
@@ -44,6 +45,7 @@ export async function migrateStudentModel() {
     console.log(await ClassStudentRelation.countDocuments());
 
     return "migrated sucessfully";
+    // eslint-disable-next-line
   } catch (error: any) {
     console.error("MIGRATION ERROR:", error);
     return error.message;

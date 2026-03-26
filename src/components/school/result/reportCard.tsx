@@ -148,9 +148,9 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
   };
 
   return (
-    <div className="w-[210mm] font-sans min-h-[297mm] mx-auto bg-white border border-black p-6 text-[12px] leading-tight break-after-page print:border-none ">
+    <div className="w-[210mm] outline-4 relative font-sans min-h-[297mm] mx-auto bg-white border border-black p-6 text-[12px] leading-tight break-after-page print:border-none ">
       {/* ================= SCHOOL HEADER TABLE ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse  border-8 border-red-700 border-b-0  z-10">
         <tbody>
           <tr>
             {/* Left Logo Placeholder */}
@@ -167,15 +167,15 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
 
             {/* School Info */}
             <td className="border border-black p-3 text-center">
-              <h1 className="text-xl font-bold uppercase tracking-wide">
+              <h1 className="text-3xl font-bold text-red-700 uppercase tracking-wide">
                 ANGELS PUBLIC SCHOOL
               </h1>
-              <p className="text-xs text-gray-600 mt-1"></p>
-              <p className="text-xs text-gray-500">UDISE: 09031001737</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-red-700 mt-1"></p>
+              <p className="text-xs text-red-700">UDISE: 09031001737</p>
+              <p className="text-xs text-red-700">
                 MOHL. PREM NAGAR JALALABAD, DIST. BIJNOR, UTTAR PRADESH
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-red-700">
                 +91-8273806070 | +91-8445533338
               </p>
             </td>
@@ -199,7 +199,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= REPORT TITLE ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse border-8 border-red-700 border-y-0  z-10">
         <tbody>
           <tr>
             <td className="border border-black p-2 text-center border-t-0">
@@ -215,7 +215,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= STUDENT INFORMATION - THREE COLUMN LAYOUT ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse z-10 border-8 border-red-700 border-y-0">
         <tbody>
           <tr>
             {/* Column 1 - Personal Information */}
@@ -304,7 +304,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= SCHOLASTIC PERFORMANCE TABLE ================= */}
-      <table className="w-full border-collapse text-xs">
+      <table className="w-full border-collapse text-xs z-10 border-8 border-red-700 border-y-0">
         <thead>
           <tr>
             <th className="border border-black p-2 text-left font-semibold border-t-0">
@@ -422,7 +422,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= RESULT & ATTENDANCE TABLE ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse z-10 border-8 border-red-700 border-y-0">
         <tbody>
           <tr>
             <th className="border border-black p-2 text-left font-semibold w-1/2 border-t-0">
@@ -560,7 +560,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= REMARKS TABLE ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse z-10 border-8 border-red-700 border-y-0">
         <tbody>
           <tr>
             <th className="border border-black p-2 text-left font-semibold border-t-0">
@@ -621,7 +621,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
       </table>
 
       {/* ================= SIGNATURE TABLE ================= */}
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse z-10 border-8 border-red-700 border-t-0">
         <tbody>
           <tr>
             <td className="border border-black p-3 text-center w-1/3 border-t-0">
@@ -642,6 +642,17 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
           </tr>
         </tbody>
       </table>
+
+      <div className="inset-0 absolute flex items-center justify-center ">
+        <div className="relative w-125 aspect-square opacity-10">
+          <Image
+            className="object-contain"
+            src={"/logo.png"}
+            alt={student.name}
+            fill
+          />
+        </div>
+      </div>
     </div>
   );
 };
