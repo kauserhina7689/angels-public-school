@@ -1,6 +1,7 @@
 "use server";
 
 import { studentResultType } from "@/lib/types";
+import { examMaxMarks } from "@/lib/utils";
 import { connectDB } from "@/server/DB";
 import { ClassModel } from "@/server/DB/models/Class";
 import { MarksModel } from "@/server/DB/models/marks";
@@ -21,18 +22,40 @@ export async function getTabulationByClassId(class_id: string): Promise<
 > {
   try {
     console.log({ class_id }, "Getting tabulation");
+
     await connectDB();
+
     const currentClass = await ClassModel.findById(class_id);
     if (!currentClass) throw new Error("No class found with id " + class_id);
+
     const relations = await ClassStudentRelation.find({ class_id }).populate(
       "student_id",
-      "name motherName fatherName serialNumber"
+      "name motherName fatherName serialNumber address mobileNumber bloodGroup dob image_url",
     );
+
     const { class_name, subjects } = currentClass;
+
     const result = await Promise.all(
       relations.map(async (r) => {
-        const { name, motherName, fatherName, serialNumber, _id } =
-          r.student_id;
+        // eslint-disable-next-line
+        const student = r.student_id as any;
+
+        const {
+          name,
+          motherName,
+          fatherName,
+          serialNumber,
+          _id,
+          address,
+          mobileNumber,
+          bloodGroup,
+          dob,
+          image_url,
+        } = student;
+
+        // get rollnumber from relation
+        const { rollnumber } = r;
+
         const subjectMarks: Record<
           string,
           {
@@ -40,30 +63,29 @@ export async function getTabulationByClassId(class_id: string): Promise<
             exam: Record<string, { max: number; obtained: number }>;
           }
         > = {};
+
         for (const subject of subjects) {
-          // console.log(subject);
           const marks = await MarksModel.find({
             class_id,
             student_id: _id,
             subject_id: subject._id,
           });
+
           const mark: Record<string, { max: number; obtained: number }> = {};
+
           for (const m of marks) {
             mark[m.examType] = {
-              max: m.max,
+              max: examMaxMarks[m.examType],
               obtained: m.obtained,
             };
           }
+
           subjectMarks[subject._id!.toString()] = {
-            exam: mark,
             subject_name: subject.name,
+            exam: mark,
           };
         }
-        // const subjectMarks = subjects.map(s=>{
-        //   const {name,_id} = s;
-        //   const marks =await MarksModel.findOne({})
-        //   return
-        // });
+
         return {
           name,
           motherName,
@@ -71,10 +93,20 @@ export async function getTabulationByClassId(class_id: string): Promise<
           serialNumber,
           _id: (_id as Types.ObjectId).toString(),
           class_name,
+
+          // ✅ Added fields (no structure change)
+          address,
+          mobileNumber,
+          bloodGroup,
+          dob,
+          image_url,
+          rollnumber,
+
           subjectMarks,
         };
-      })
+      }),
     );
+
     return {
       success: true,
       message: "Fetched tabulation successfully",
@@ -84,6 +116,10 @@ export async function getTabulationByClassId(class_id: string): Promise<
   } catch (error: any) {
     console.log(error);
 
-    return { success: false, message: error.message, data: null };
+    return {
+      success: false,
+      message: error.message,
+      data: null,
+    };
   }
 }

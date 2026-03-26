@@ -36,8 +36,8 @@ export const bloodGroups = [
 ] as const;
 export const examTypes = {
   unitTest1: "Unit Test 1",
+  halfYearlyExam: "Half Yearly ",
   unitTest2: "Unit Test 2",
-  halfYearlyExam: "Half-Yearly Exam",
   annualFinal: "Annual Exam",
 } as const;
 export const examMaxMarks: Record<string, number> = {

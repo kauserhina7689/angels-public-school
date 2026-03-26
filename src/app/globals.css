@@ -170,5 +170,16 @@
     #printArea .printButton {
       visibility: hidden;
     }
+    body {
+      background: white;
+    }
+
+    #printArea {
+      padding: 0;
+    }
+
+    .break-after-page {
+      page-break-after: always;
+    }
   }
 }

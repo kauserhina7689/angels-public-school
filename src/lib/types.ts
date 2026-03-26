@@ -77,7 +77,7 @@ export class CustomError extends Error {
       redirectUrl?: string;
       redirectLabel?: string;
       statusCode?: number;
-    }
+    },
   ) {
     super(message);
     this.name = "CustomError";
@@ -95,6 +95,16 @@ export interface studentResultType {
   serialNumber: number;
   _id: string;
   class_name: string;
+
+  // ✅ NEW FIELDS (added from backend)
+  address: string;
+  mobileNumber: number;
+  bloodGroup: "A+" | "A−" | "B+" | "B−" | "AB+" | "AB−" | "O+" | "O−";
+  dob?: string | Date;
+  image_url: string;
+  rollnumber: string;
+
+  // existing
   subjectMarks: Record<
     string,
     {

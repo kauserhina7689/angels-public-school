@@ -55,6 +55,11 @@ export const menuItems = [
     href: "/school/assignments",
     icon: FileText,
   },
+  {
+    title: "Results",
+    href: "/school/result",
+    icon: FileText,
+  },
 ];
 
 interface StudentSidebarProps {
@@ -66,7 +71,7 @@ export function SchoolSidebar({ className }: StudentSidebarProps) {
     <aside
       className={cn(
         " flex-col h-full bg-white border-r border-gray-200 w-44 hidden sm:flex",
-        className
+        className,
       )}
     >
       {/* Navigation */}
