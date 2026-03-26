@@ -30,7 +30,7 @@ interface AttendanceData {
 const StudentReportCard: React.FC<Props> = ({ student }) => {
   // State for editable attendance
   const [attendance, setAttendance] = useState<AttendanceData>({
-    totalWorkingDays: 180,
+    totalWorkingDays: 194,
     daysPresent: 165,
     percentage: ((165 / 180) * 100).toFixed(1),
   });
