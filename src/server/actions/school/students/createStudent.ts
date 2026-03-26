@@ -45,7 +45,7 @@ type createStudentReturnType =
       message: string;
     };
 export async function createOrUpdateStudent(
-  student: StudentFormData & { oldClassId: string }
+  student: StudentFormData & { oldClassId: string },
 ): Promise<createStudentReturnType> {
   //*init database session
   await connectDB();
@@ -91,13 +91,13 @@ async function createStudent({
     await connectDB();
     console.log("creating student ", _id);
     const { public_id, secure_url } = await uploadCloudinary(
-      student.file as File
+      student.file as File,
     );
     const currentSession = await getCurrentSession();
     console.log({ student, rollnumber, currentSession, class_id });
 
     const password = await hashPassword(
-      `${student.adhaarNumber + student.serialNumber}`
+      `${student.adhaarNumber + student.serialNumber}`,
     );
     const newStudent = await StudentModel.create({
       ...student,
@@ -115,7 +115,7 @@ async function createStudent({
 
     const studentClass = await ClassModel.findById(class_id);
     await studentClass?.students.push(
-      newStudent._id as mongoose.Types.ObjectId
+      newStudent._id as mongoose.Types.ObjectId,
     );
     await studentClass?.save();
     return { success: true, message: "Added student successfully" };
@@ -186,7 +186,7 @@ async function updateStudent({
         name,
         serialNumber,
       },
-      { session, new: true, runValidators: true }
+      { session, new: true, runValidators: true },
     );
 
     if (!oldStudent)
@@ -203,7 +203,10 @@ async function updateStudent({
     const CurrentSession = (await getCurrentSession())!;
     if (class_id == oldClassId) {
       //*If new class_id=== old class then just update roll number of the class
-      console.log("Class not changed over riding roll number if updated");
+      console.log(
+        "Class not changed over riding roll number if updated",
+        rollnumber,
+      );
       oldStudent.classes = oldStudent.classes.map((c) => {
         if ((c.class_id as mongoose.Types.ObjectId).toString() == class_id)
           return { ...c, rollnumber: rollnumber.toString() };

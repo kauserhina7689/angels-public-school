@@ -381,18 +381,18 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
             <td className="border border-black p-2">GRAND TOTAL</td>
             {examTypes.map((examType) => (
               <React.Fragment key={examType}>
-                <td className="border border-black p-2 text-center">
+                <td className="border text-red-500 border-black p-2 text-center">
                   {examTotals[examType].max}
                 </td>
-                <td className="border border-black p-2 text-center">
+                <td className="border border-black text-red-500 p-2 text-center">
                   {examTotals[examType].obtained}
                 </td>
               </React.Fragment>
             ))}
-            <td className="border border-black p-2 text-center">
+            <td className="border border-black text-red-500 p-2 text-center">
               {grandTotal.totalMax}
             </td>
-            <td className="border border-black p-2 text-center">
+            <td className="border border-black text-red-500 p-2 text-center">
               {grandTotal.totalObtained}
             </td>
           </tr>
@@ -406,14 +406,14 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
               <td
                 key={`${examType}-percentage`}
                 colSpan={2}
-                className="border border-black p-2 text-right font-medium"
+                className="border text-red-500 border-black p-2 text-right font-medium"
               >
                 {examTotals[examType].percentage}%
               </td>
             ))}
             <td
               colSpan={2}
-              className="border border-black p-2 text-right font-semibold"
+              className="border text-red-500 border-black p-2 text-right font-semibold"
             >
               {grandTotal.percentage}%
             </td>
@@ -446,7 +446,9 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
                     <td className="py-1 font-semibold w-36">
                       OVERALL PERCENTAGE:
                     </td>
-                    <td className="py-1 font-bold">{grandTotal.percentage}%</td>
+                    <td className="py-1 text-red-500 font-bold">
+                      {grandTotal.percentage}%
+                    </td>
                   </tr>
                   <tr>
                     <td className="py-1 font-semibold">RESULT:</td>
@@ -461,18 +463,17 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
                       )}
                     </td>
                   </tr>
+
                   <tr>
-                    <td className="py-1 font-semibold">GRADE:</td>
-                    <td className="py-1">
-                      {isPass
-                        ? Number(grandTotal.percentage) >= 75
-                          ? "A+ (DISTINCTION)"
-                          : Number(grandTotal.percentage) >= 60
-                            ? "A (FIRST DIVISION)"
-                            : Number(grandTotal.percentage) >= 45
-                              ? "B (SECOND DIVISION)"
-                              : "C (THIRD DIVISION)"
-                        : "F (FAIL)"}
+                    <td className="py-1 font-semibold">POSITION:</td>
+                    <td className="py-1 font-bold text-red-500">
+                      {student.rank === 1
+                        ? "1st"
+                        : student.rank === 2
+                          ? "2nd"
+                          : student.rank === 3
+                            ? "3rd"
+                            : "Passed"}
                     </td>
                   </tr>
                 </tbody>
@@ -534,15 +535,19 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
                       <td className="py-1 font-semibold w-32">
                         TOTAL WORKING DAYS:
                       </td>
-                      <td className="py-1">{attendance.totalWorkingDays}</td>
+                      <td className="py-1 text-red-500">
+                        {attendance.totalWorkingDays}
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-1 font-semibold">DAYS PRESENT:</td>
-                      <td className="py-1">{attendance.daysPresent}</td>
+                      <td className="py-1 text-red-500">
+                        {attendance.daysPresent}
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-1 font-semibold">ATTENDANCE %:</td>
-                      <td className="py-1 font-bold">
+                      <td className="py-1 font-bold text-red-500">
                         {attendance.percentage}%
                       </td>
                     </tr>

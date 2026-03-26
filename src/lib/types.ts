@@ -95,6 +95,7 @@ export interface studentResultType {
   serialNumber: number;
   _id: string;
   class_name: string;
+  rank?: number;
 
   // ✅ NEW FIELDS (added from backend)
   address: string;
