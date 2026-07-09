@@ -148,7 +148,7 @@ const StudentReportCard: React.FC<Props> = ({ student }) => {
   };
 
   return (
-    <div className="w-[210mm] outline-4 relative z-10 font-sans min-h-[297mm] mx-auto bg-white border border-black p-6 text-[12px] leading-tight break-after-page print:border-none ">
+    <div className="w-[210mm] outline-4 relative z-10 font-sans min-h-[297mm] mx-auto bg-white  p-6 text-[12px] leading-tight break-after-page print:border-none ">
       {/* ================= SCHOOL HEADER TABLE ================= */}
       <table className="w-full border-collapse  border-8 border-red-700 border-b-0  z-10">
         <tbody>
